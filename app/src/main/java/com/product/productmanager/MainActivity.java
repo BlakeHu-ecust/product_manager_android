@@ -12,6 +12,8 @@ import android.widget.LinearLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.Flowable;
+import io.reactivex.functions.Consumer;
 
 public class MainActivity extends Activity {
 
@@ -27,6 +29,12 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        Flowable.just("Hello world")
+                .subscribe(new Consumer<String>() {
+                    @Override public void accept(String s) {
+                        System.out.println(s);
+                    }
+                });
     }
 
     @OnClick({R.id.company_button, R.id.company_rootView})

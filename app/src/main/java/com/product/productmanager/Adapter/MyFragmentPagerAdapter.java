@@ -7,19 +7,20 @@ import android.view.ViewGroup;
 
 import com.product.productmanager.HomeActivity;
 import com.product.productmanager.Tab.TabFragment1;
+import com.product.productmanager.Tab.TabFragment2;
 import com.product.productmanager.Tab.TabFragment3;
 
 public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
     private final int PAGER_COUNT = 3;
     private TabFragment1 myFragment1 = null;
-    private TabFragment1 myFragment2 = null;
+    private TabFragment2 myFragment2 = null;
     private TabFragment3 myFragment3 = null;
 
 
     public MyFragmentPagerAdapter(FragmentManager fm) {
         super(fm);
         myFragment1 = new TabFragment1();
-        myFragment2 = new TabFragment1();
+        myFragment2 = new TabFragment2();
         myFragment3 = new TabFragment3();
     }
 

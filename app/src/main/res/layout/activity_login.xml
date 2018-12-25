@@ -45,14 +45,16 @@
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp" />
+
             <EditText
                 android:id="@+id/login_pwd"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@android:color/transparent"
                 android:hint="密码"
-                android:textSize="14dp"
+                android:inputType="textPassword"
                 android:textColor="@android:color/white"
-                android:background="@android:color/transparent"/>
+                android:textSize="14dp" />
         </LinearLayout>
         <Button
             android:id="@+id/login_button"

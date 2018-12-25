@@ -90,57 +90,11 @@ public class HomeActivity extends AppCompatActivity implements RadioGroup.OnChec
                 mVp.setCurrentItem(PAGE_ONE);
                 break;
             case R.id.rb_2:
-                //mVp.setCurrentItem(PAGE_TWO);
-                if (ContextCompat.checkSelfPermission(HomeActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(HomeActivity.this, new String[]{Manifest.permission.CAMERA}, 1);
-                } else {
-                    //扫码
-                    goScan();
-                }
-
+                mVp.setCurrentItem(PAGE_TWO);
                 break;
             case R.id.rb_3:
                 mVp.setCurrentItem(PAGE_THREE);
                 break;
-        }
-    }
-
-    private void goScan(){
-        Intent intent=new Intent(HomeActivity.this,CaptureActivity.class);
-        startActivityForResult(intent,101);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode){
-            case 101:
-                if(resultCode==RESULT_OK){
-                    /**
-                     * 扫码成功
-                     */
-                    String s = data.getStringExtra("qrCode");
-                    Log.d("QRCode",s);
-
-                }
-                break;
-            default:
-                break;
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case 1:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    //扫码
-                    goScan();
-                } else {
-                    Toast.makeText(this, "你拒绝了权限申请，无法打开相机扫码哟！", Toast.LENGTH_SHORT).show();
-                }
-                break;
-            default:
         }
     }
 }

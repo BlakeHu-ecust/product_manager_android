@@ -27,11 +27,12 @@
                 android:layout_gravity="center_horizontal"/>
             <View
                 android:id="@+id/tipsBar_1"
-                android:layout_width="60dp"
+                android:layout_width="70dp"
                 android:layout_height="3dp"
                 android:background="@color/main_color"
-                android:layout_marginTop="5dp"
-                android:layout_gravity="center_horizontal"></View>
+                android:layout_marginTop="8dp"
+                android:layout_gravity="center_horizontal"
+                ></View>
         </LinearLayout>
         <LinearLayout
             android:id="@+id/lin2"
@@ -47,10 +48,10 @@
                 android:layout_gravity="center_horizontal"/>
             <View
                 android:id="@+id/tipsBar_2"
-                android:layout_width="60dp"
+                android:layout_width="70dp"
                 android:layout_height="3dp"
                 android:background="@color/main_color"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="8dp"
                 android:layout_gravity="center_horizontal"></View>
         </LinearLayout>
         <LinearLayout
@@ -67,10 +68,10 @@
                 android:layout_gravity="center_horizontal"/>
             <View
                 android:id="@+id/tipsBar_3"
-                android:layout_width="60dp"
+                android:layout_width="70dp"
                 android:layout_height="3dp"
                 android:background="@color/main_color"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="8dp"
                 android:layout_gravity="center_horizontal"></View>
         </LinearLayout>
     </LinearLayout>

@@ -1,7 +1,8 @@
 package com.product.productmanager;
 
-import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,7 +12,9 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.product.productmanager.Model.UserModel;
+import com.product.productmanager.Other.SharedPreferencesHelper;
 import com.product.productmanager.Other.ToolClass;
+import com.product.productmanager.View.Loading_view;
 import com.product.productmanager.http.RetrofitFactory;
 import com.product.productmanager.http.base.BaseObserver;
 import com.product.productmanager.http.bean.BaseEntity;
@@ -30,28 +33,39 @@ public class LoginActivity extends BaseActivity {
     @BindView(R.id.login_rootView)
     LinearLayout loginRootView;
 
+    private static final String USER_NAME = "userName";
+    private static final String PASSWORD = "passWord";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+        sharedPreferencesHelper = new SharedPreferencesHelper(LoginActivity.this,"save");
+        loginAccount.setText(sharedPreferencesHelper.getSharedPreference(USER_NAME,"").toString());
+        loginPwd.setText(sharedPreferencesHelper.getSharedPreference(PASSWORD,"").toString());
     }
 
     @OnClick({R.id.login_button, R.id.login_rootView})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.login_button:
-//                if (loginAccount.getText().toString().length() == 0){
-//                    ToolClass.showMessage("请输入用户名",LoginActivity.this);
-//                    return;
-//                }
-//                if (loginPwd.getText().toString().length() == 0){
-//                    ToolClass.showMessage("请输入密码",LoginActivity.this);
-//                    return;
-//                }
+                if (loginAccount.getText().toString().length() == 0){
+                    ToolClass.showMessage("请输入账号",LoginActivity.this);
+                    return;
+                }
+                if (loginPwd.getText().toString().length() == 0){
+                    ToolClass.showMessage("请输入密码",LoginActivity.this);
+                    return;
+                }
+                sharedPreferencesHelper.put(USER_NAME,loginAccount.getText().toString());
+                sharedPreferencesHelper.put(PASSWORD,loginPwd.getText().toString());
+
+                ToolClass.showProgress(LoginActivity.this);
+
                 RetrofitFactory.getInstence()
                         .API()
-                        .login("15322222222","123456",String.valueOf(System.currentTimeMillis()))
+                        .login(loginAccount.getText().toString(),loginPwd.getText().toString(),String.valueOf(System.currentTimeMillis()))
                         .compose(this.<BaseEntity<UserModel>>setThread())
                         .subscribe(new BaseObserver<UserModel>() {
                             @Override
@@ -60,16 +74,20 @@ public class LoginActivity extends BaseActivity {
                                 Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
                                 startActivity(intent);
                                 finish();
+                                ToolClass.progressDismisss();
                             }
 
                             @Override
                             protected void onCodeError(BaseEntity<UserModel> t) throws Exception {
+                                ToolClass.progressDismisss();
                                 ToolClass.showMessage(t.getMes(),LoginActivity.this);
                             }
 
                             @Override
                             protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                                ToolClass.progressDismisss();
                                 Log.e("Error",e.getLocalizedMessage());
+                                ToolClass.showMessage(e.getLocalizedMessage(),LoginActivity.this);
                             }
                         });
 

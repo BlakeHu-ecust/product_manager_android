@@ -29,7 +29,7 @@
             android:id="@+id/rb_2"
             style="@style/tab_menu_item"
             android:drawableTop="@drawable/tab_menu_message"
-            android:text="" />
+            android:text="扫码" />
 
         <RadioButton
             android:id="@+id/rb_3"

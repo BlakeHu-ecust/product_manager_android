@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/capture_frame"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <SurfaceView
+        android:id="@+id/capture_preview_view"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_gravity="center" />
+
+    <com.product.productmanager.scanner.view.ViewfinderView
+        android:id="@+id/capture_viewfinder_view"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_gravity="center"
+        android:background="@android:color/transparent" />
+
+
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="75.0dip"
+        android:layout_gravity="bottom|center"
+        android:background="@color/capture_text_cover_bg"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="75.0dip"
+            android:gravity="center"
+            android:background="@color/capture_text_cover_bg"
+            android:orientation="horizontal"
+            android:weightSum="5.0">
+
+
+            <TextView
+                android:id="@+id/capture_top_hint"
+                android:layout_width="0.0dip"
+                android:layout_height="85.0dip"
+                android:layout_gravity="center"
+                android:layout_weight="3.0"
+                android:gravity="center"
+                android:textColor="#ffffffff"
+                android:textSize="13.0sp" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+</FrameLayout>

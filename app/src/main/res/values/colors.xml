@@ -13,5 +13,93 @@
     <color name="text_topbar">#694E42</color>
     <color name="div_white">#E5E5E5</color>
     <color name="main_color">#c0e7f8</color>
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+    <color name="gray">#666666</color>
+    <color name="bg_line">#e6e6e6</color>
+    <color name="translate">#00000000</color>
+    <color name="hint_color">#9C9C9C</color>
+    <color name="view_color">#F3F3F3</color>
+    <color name="picker_color">#5D86A9</color>
+    <color name="picker_color2">#5884a9</color>
+
+    <color name="result_view">#b0000000</color>
+    <color name="viewfinder_mask">#60000000</color>
+    <color name="possible_result_points">#c0ffff00</color>
+    <color name="capture_text_cover_bg">#99535353</color>
+
+    <color name="common_bg">#F8F8F8</color>
+    <color name="visit_drop_bg">#F2F2F2</color>
+
+    <color name="client_status">#FFA200</color>
+
+    <color name="search_bg">#d2d2d2</color>
+
+
+    <color name="common_line">#dddddd</color>
+
+    <color name="common_line1">#f2f2f2</color>
+
+    <color name="common_line2">#F0F0F0</color>
+
+    <color name="color_EBEFE3">#EBEFE3</color>
+
+    <color name="common_normal_font">#525252</color>
+
+    <color name="common_white_font">#f0f0f0</color>
+
+    <color name="common_hint_font">#b5b5b5</color>
+
+    <color name="common_num_right_font">#2a2a2a</color>
+    <color name="common_red_font">#fb0000</color>
+
+    <color name="common_gray_font">#9c9a9a</color>
+
+    <color name="hint_title_color">#BDBCBC</color>
+    <color name="hint_color_fragment">#BEBEBE</color>
+    <color name="ce_bar_bg">#e7e7e7</color>
+    <color name="dialog_bg">#fafafa</color>
+    <color name="province_line_border">#d1d1d1</color>
+    <color name="mytask_coin_yel">#f4a600</color>
+
+    <color name="share__count_yell">#f3a800</color>
+
+    <color name="camera_item_line">#c8c8c8</color>
+
+    <color name="light_gray">#99a4b7</color>
+    <color name="light_blue">#87d0f2</color>
+
+    <color name="dcw_isrequired_input">#ff0000</color>
+    <color name="color_999999">#999999</color>
+    <color name="color_888888">#888888</color>
+    <color name="color_777777">#777777</color>
+    <color name="color_555555">#555555</color>
+    <color name="color_333333">#333333</color>
+    <color name="color_757575">#757575</color>
+    <color name="color_8C8C8C">#8C8C8C</color>
+    <color name="color_f99f01">#f99f01</color>
+    <color name="color_f8f8f8">#f8f8f8</color>
+    <color name="color_b4b4b4">#b4b4b4</color>
+    <color name="color_aaaaaa">#aaaaaa</color>
+    <color name="color_404040">#404040</color>
+    <color name="color_eb6877">#eb6877</color>
+    <color name="color_a6d44d">#A6D44D</color>
+    <color name="color_ffbe00">#FFBE00</color>
+    <color name="color_63a6f4">#63A6F4</color>
+    <color name="color_ff5f71">#FF5F71</color>
+    <color name="color_00a7fe">#00A7FE</color>
+    <color name="color_00a0e9">#00a0e9</color>
+    <color name="color_00a3ef">#00a3ef</color>
+    <color name="color_f0f0f0">#f0f0f0</color>
+    <color name="drop_pop_menu_bg_color">#444e58</color>
+
+    <color name="text_10">#333333</color>
+    <color name="text_11">#999999</color>
+    <color name="text_blue">#00A3EF</color>
+    <color name="text_red">#FF0000</color>
+    <color name="color_c8c8c8">#C8C8C8</color>
+    <color name="color_959595">#959595</color>
+    <color name="color_ff7200">#ff7200</color>
+    <color name="color_ff9c9c">#ff9c9c</color>
 </resources>
 

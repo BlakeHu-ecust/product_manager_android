@@ -1,0 +1,557 @@
+package com.product.productmanager.scanner.event;
+
+/**
+ *
+ * @author HSHY-300
+ * @date 2017/9/27
+ */
+
+
+public enum Event {
+/**
+ * 删除图片
+ */
+    DELETE_IMAGE_SUCCESS,
+    /**
+     * 获取收货地址列表成功
+     */
+    NET_ADDRESS_LIST_SUCCESS,
+    /**
+     * 获取收货地址详情成功
+     */
+    NET_ADDRESS_DETAIL_SUCCESS,
+    /**
+     * 添加收货地址成功
+     */
+    NET_ADDRESS_OPERATION_SUCCESS,
+    /**
+     * 删除收货地址
+     */
+    NET_ADDRESS_DELETE_SUCCESS,
+    /**
+     * 设置默认地址成功
+     */
+    NET_ADDRESS_DEFAULT_SUCCESS,
+    /**
+     * 修改密码成功
+     */
+    NET_CHANGE_PWD_SUCCESS,
+    /**
+     * 忘记密码
+     */
+    NET_FORGET_PWD_SUCCESS,
+
+    POP_WINDOW_DISMISS,
+    POP_POPUPWINDOW_SHOW,
+    POP_POPUPWINDOW_DISMISS,
+    /**
+     * 登录
+     */
+    NET_LOGIN_SUCCESS,
+    /**
+     * 获取验证码
+     */
+    NET_GET_VERIFICATION_SUCCESS,
+    /**
+     * 校验验证码
+     */
+    NET_CHECK_VERIFICATION_SUCCESS,
+    /**
+     * 意见图片
+     */
+    NET_POST_PIC_FEEDBACK, NET_POST_PIC_FEEDBACK_SUCCESS,NET_GET_QA_FEEDBACK_SUCCESS,
+    /**
+     * 靶向药
+     */
+    NET_POST_PIC_MEDICINE, NET_POST_PIC_MEDICINE_SUCCESS,
+    NET_POST_PIC_REPORT, NET_POST_PIC_REPORT_SUCCESS,
+    NET_POST_PIC_INVOICE, NET_POST_PIC_INVOICE_SUCCESS,
+    NET_POST_PIC_AGREEMENT, NET_POST_PIC_AGREEMENT_SUCCESS,
+    NET_POST_PIC_APPLY, NET_POST_PIC_APPLY_SUCCESS,
+    NET_POST_PIC_RECEIPT, NET_POST_PIC_RECEIPT_SUCCESS,
+    /**
+     * DCW
+     */
+    NET_POST_PIC_ORIGINAL, NET_POST_PIC_ORIGINAL_SUCCESS,
+    NET_POST_PIC_IMAGE, NET_POST_PIC_IMAGE_SUCCESS,
+    NET_POST_PIC_BLOOD, NET_POST_PIC_BLOOD_SUCCESS,
+    NET_POST_PIC_DOCTOR_ADVICE, NET_POST_PIC_DOCTOR_ADVICE_SUCCESS,
+    NET_POST_PIC_MIRROR, NET_POST_PIC_MIRROR_SUCCESS,
+    NET_POST_PIC_TUMOUR, NET_POST_PIC_TUMOUR_SUCCESS,
+    /**
+     * 转诊资料
+     */
+    NET_POST_PIC_TREATMENT, NET_POST_PIC_TREATMENT_SUCCESS,
+    NET_POST_PIC_TREATMENT_UPLOAD, NET_POST_PIC_TREATMENT_UPLOAD_SUCCESS,
+    NET_POST_TREATMENT_UPLOAD_SUCCESS,
+    /**
+     * 转诊添加
+     */
+    NET_POST_PIC_TREATMENT_ADD, NET_POST_PIC_TREATMENT_ADD_SUCCESS,
+    /**
+     * 科研协议上传
+     */
+    NET_POST_PIC_PROTOCOL_ADD, NET_POST_PIC_PROTOCOL_ADD_SUCCESS,
+    NET_POST_PIC_SCIENCE_NEED, NET_POST_PIC_SCIENCE_NEED_SUCCESS,
+    NET_POST_PIC_SCIENCE_ADD, NET_POST_PIC_SCIENCE_ADD_SUCCESS,
+    NET_POST_PROTOCOL_ADD_SUCCESS,
+    NET_POST_SCIENCE_OPERATION_SUCCESS,
+    NET_POST_SCIENCE_OPERATION_FAIL,
+    NET_GET_QA_MEDICINE_SUCCESS,
+    DELETE_MEDICINE_FORMAT,
+    DELETE_MATERIAL_FORMAT,
+    /**
+     * 付款
+     */
+    NET_POST_PIC_PROCEED, NET_POST_PIC_PROCEED_SUCCESS,
+    /**
+     * 获取基因检测列表成功
+     */
+    NET_GET_GENEDETECTION_LIST_SUCCESS,
+    NET_GET_GENESEND_LIST_SUCCESS,
+    /**
+     * 获取医生列表成功
+     */
+    NET_GET_GENEDOCLIST_SUCCESS,
+    NET_GET_DRUGDOCLIST_SUCCESS,
+    /**
+     * 获取基因检测套餐列表成功
+     */
+    NET_GET_GENEPACKAGE_LIST_SUCCESS,
+    /**
+     * 获取检测机构列表成功
+     */
+    NET_GET_DETECTIONORG_LIST_SUCCESS,
+    /**
+     * 获取耗材列表成功
+     */
+    NET_GET_GENEMATERIAL_LIST_SUCCESS,
+    /**
+     * 获取字典项成功
+     */
+    NET_GET_DICT_SUCCESS,
+    NET_GET_TREE_DICT_SUCCESS,
+    /**
+     * 获取佣金（积分）成功
+     */
+    NET_GET_CALCCOMMISSION,
+    /**
+     * 基因检测图片
+     */
+    NET_POST_DETECTION_IMAGE,
+    NET_POST_DETECTION_IMAGE_SUCCESS,
+    /**
+     * 基因样本图片
+     */
+    NET_POST_DETECTION_SAMPLE_IMAGE,
+    NET_POST_DETECTION_SAMPLE_IMAGE_SUCCESS,
+    /**
+     * 血液样本图片
+     */
+    NET_POST_DETECTION_BLOOD_IMAGE,
+    NET_POST_DETECTION_BLOOD_IMAGE_SUCCESS,
+    /**
+     * 支付宝凭证
+     */
+    NET_POST_DETECTION_ALIPAY_IMAGE,
+    NET_POST_DETECTION_ALIPAY_IMAGE_SUCCESS,
+
+    NET_GENEORDER_ADD_SUCCESS,
+    NET_GENEORDER_ADD_FAIL,
+
+    NET_GET_GENEORDER_DETAIL_SUCCESS,
+    /**
+     * 上传DCW
+     */
+    NET_POST_GENE_DCW_SUCCESS,
+    /**
+     * 上传DCW
+     */
+    NET_POST_GENE_DCW_FAIL,
+    /**
+     * 申请录入
+     */
+    NET_POST_GENE_ENTERING_SUCCESS,
+    /**
+     * 取消基因检测订单
+     */
+    NET_POST_GENE_CANCEL_SUCCESS,
+    /**
+     * 基因检测订单收款
+     */
+    NET_POST_GENE_PAY_SUCCESS,
+    /**
+     * 扫码成功
+     */
+    NET_SCANNING_SUCCESS,
+    /**
+     * 获取物流详细路径
+     */
+    NET_GET_LOGISTICS_DETAIL_SUCCESS,
+    /**
+     * 获取检测单二维码
+     */
+    NET_GET_QRCODE_SUCCESS,
+    NET_GET_QRCODE_SUCCESS2,
+    /**
+     * 付款后刷新
+     */
+    NET_REFRESH_GENE_LIST,
+    NET_REFRESH_GENE_FILTER_LIST,
+    /**
+     * 操作靶向药订单
+     */
+    NET_OPERATION_MEDICINE_ORDER_SUCCESS,
+    NET_OPERATION_MEDICINE_ORDER_FAIL,
+
+    /**
+     * 获取靶向药订单列表
+     */
+    NET_GET_MEDICINELIST_SUCCESS,
+    /**
+     *根据id获取检测套餐信息
+     */
+    NET_GET_PACKAGEINFO_SUCCESS,
+    /**
+     * 根据检测单id获取样本补寄记录列表
+     */
+    NET_GET_ADDITION_LIST_SUCCESS2,
+    /**
+     * 根据id获取套餐检测信息
+     */
+    NET_GET_ORGINFO_SUCCESS,
+    /**
+     * 获取药品列表
+     */
+    NET_GET_DRUG_LIST_SUCCESS,
+    /**
+     * 获取疾病列表
+     */
+    NET_GET_CANCER_LIST_SUCCESS,
+    DELETE_CANCER_SUCCESS,
+    /**
+     * 获取规格列表
+     */
+    NET_GET_SPEC_LIST_SUCCESS,
+    /**
+     * 获取药房列表
+     */
+    NET_GET_DRUG_STORE_LIST_SUCCESS,
+    /**
+     * 获取靶向药详情
+     */
+    NET_GET_MEDICINE_DETAIL_SUCCESS,
+    /**
+     * 添加转诊订单
+     */
+    NET_ADD_TREATMENT_ORDER_SUCCESS,
+    NET_ADD_TREATMENT_ORDER_FAIL,
+
+    /**
+     * 获取转诊订单列表
+     */
+    NET_GET_TREATMENT_LIST_SUCCESS,
+    /**
+     * 修改转诊订单
+     */
+    NET_MODIFY_TREATMENT_ORDER_SUCCESS,
+    /**
+     * 取消转诊订单
+     */
+    NET_CANCEL_TREATMENT_ORDER_SUCCESS,
+    /**
+     * 提交意见反馈成功
+     */
+    NET_FEEDBACK_SUCCESS,
+    /**
+     * 获取用户信息成功
+     */
+    NET_GETUSERINFO_SUCCESS,
+    /**
+     * 更新头像成功
+     */
+    NET_HEADIMAGE_SUCCESS,
+    NET_UPDATEHEADIMAGE_SUCCESS,
+    /**
+     * 获取转诊单详情成功
+     */
+    NET_GETTREATMENT_DETAIL_SUCCESS,
+    /**
+     * 获取积分比例成功
+     */
+    NET_GET_INTEGERALS_SUCCESS,
+
+    /**
+     * 获取科研订单列表
+     */
+    NET_GET_SCIENCE_LIST_SUCCESS,
+    /**
+     * 获取科研订单详情
+     */
+    NET_GET_SCIENCE_DETAIL_SUCCESS,
+    /**
+     * 获取省市区
+     */
+    NET_GET_AREA_SUCCESS,
+    /**
+     * 获取会诊列表
+     */
+    NET_GET_CONSULTATIONLIST_SUCCESS,
+    /**
+     * 获取会诊详情成功
+     */
+    NET_GET_DETAIL_SUCCESS,
+    /**
+     * 修改会诊时间成功
+     */
+    NET_PUT_CONSULTATION_TIME_SUCCESS,
+    NET_PUT_CONSULTATION_TIME_FAIL,
+    /**
+     * 获取专家时间列表成功
+     */
+    NET_GET_EXPERTTIME_LIST_SUCCESS,
+    /**
+     * 获取通知列表成功
+     */
+    NET_GET_NOTIFICATION_LIST_SUCCESS,
+    /**
+     * 通知设置已读
+     */
+    NET_SET_NOTIFICATION_READ_SUCCESS,
+    /**
+     * 删除通知
+     */
+    NET_DELETE_NOTIFICATION_SUCCESS,
+    /**
+     * 获取当前用户极光推送信息
+     */
+    NET_GET_USER_NOTIFICATION_SUCCESS,
+    /**
+     * 查询所有未读消息数量
+     */
+    NET_GET_USER_NOTIFICATION_COUNT_SUCCESS,
+    /**
+     * 获取耗材列表
+     */
+    NET_GET_MATERIAL_LIST_SUCCESS,
+    /**
+     * 获取耗材详情
+     */
+    NET_GET_MATERIAL_DETAIL_SUCCESS,
+    /**
+     * 获取耗材列表成功
+     */
+    NET_GET_MATERIAL_MATERIAL_LIST_SUCCESS,
+    /**
+     * 操作耗材订单
+     */
+    NET_OPERATION_MATERIAL_ORDER_SUCCESS,
+    NET_OPERATION_MATERIAL_ORDER_FAIL,
+    /**
+     * 获取带有邀请码的用户信息
+     */
+    NET_GET_USERINVITE_CODE_SUCCCESS,
+    NET_GET_USERINVITE_CODE_SUCCCESS2,
+    /**
+     *根据检测单id获取未处理的样本补寄详情列表成功
+     */
+    NET_GET_ADDITION_LIST_SUCCESS,
+    /**
+     * 提交样本补寄信息成功
+     */
+    NET_APPLY_ADDITITON_SUCCESS,
+    /**
+     * 提交样本补寄信息失败
+     */
+    NET_APPLY_ADDITION_FAIL,
+    /**
+     * 根据检测单id获取样本补寄记录列表成功
+     */
+    NET_GET_ADDITIONRECORD_LIST_SUCCESS,
+    /**
+     * 获取样本补寄记录详情成功
+     */
+    NET_GET_ADDITIONRECORD_DETAIL_SUCCESS,
+    /**
+     * 补寄记录重新支付
+     */
+    NET_PUT_ADDITION_REPAID_SUCCESS,
+    /**
+     * 公告列表
+     */
+    NET_GET_NOTICE_SINGLE_SUCCESS,
+    NET_GET_NOTICE_LIST_SUCCESS,
+    NET_GET_NOTICE_DETAIL_SUCCESS,
+    NET_GET_NOTICE_DETAIL_INDEX_SUCCESS,
+    NET_GET_NOTICE_DETAIL_ISUCCESS,
+    NET_SET_NOTICE_READ_SUCCESS,
+    /**
+     * CRM
+     */
+    NET_GET_CRM_LIST_SUCCESS,
+    NET_GET_CRM_FOLLOW_LIST_SUCCESS,
+    NET_GET_CRM_DETAIL_SUCCESS,
+    NET_SAVE_CRM_DETAIL_SUCCESS,
+    /**
+     *获取名片分享链接成功
+     */
+    NET_GET_SHAREINFO_SUCCESS,
+    /**
+     *获取患者招募列表
+     */
+    NET_GET_RECRUIT_LIST_SUCCESS,
+    /**
+     *患者招募 获取患者招募列表
+     */
+    NET_GET_RECRUITMENT_LIST_SUCCESS,
+    /**
+     *患者招募 获取患者招募医生下患者列表
+     */
+    NET_GET_RECRUIT_DOCTOR_LIST_SUCCESS,
+    /**
+     *获取患者招募项目详情
+     */
+    NET_GET_RECRUIT_DETAIL_SUCCESS,
+    /**
+     *患者招募 获取患者招募项目详情
+     */
+    NET_GET_RECRUITMENT_DETAIL_SUCCESS,
+    NET_GET_CANCER_TYPE_LIST_SUCCESS,
+    /**
+     *获取患者招募分享链接
+     */
+    NET_GET_RECRUIT_SHARE_SUCCESS,
+    /**
+     * 基因检测套餐分页查询
+     */
+    NET_GET_GENE_PRODUCT_SUCCESS,
+    /**
+     *  基因检测套餐分页查询
+     */
+    NET_GET_GENE_PRODUCT_SEARCH_SUCCESS,
+    /**
+     * 获取基因检测药物列表
+     */
+    NET_GET_GENE_MEDICINE_LIST_SUCCESS,
+    /**
+     *获取药品列表
+     */
+    NET_GET_DRUG_LIST2_SUCCESS,
+    /**
+     *获取药品分享链接
+     */
+    NET_GET_DRUG_SHARE_SUCCESS,
+    /**
+     *获取药品详情
+     */
+    NET_GET_DRUG_DETAIL_SUCCESS,
+
+    DO_SEARCH_DATABANK_GENE,
+    DO_SEARCH_DATABANK_DRUG,
+    DO_SEARCH_DATABANK_RECRUIT,
+    CLEAR_DATABANK_GENE_RESULT,
+    CLEAR_DATABANK_DRUG_RESULT,
+    CLEAR_DATABANK_RECRUIT_RESULT,
+    /**
+     *根据id获取检测套餐信息
+     */
+    NET_GET_DATABANK_PACKAGEINFO_SUCCESS,
+    /**
+     * 新建拜访成功
+     */
+    NET_ADD_CRM_PLAN_SUCCESS,
+    /**
+     * 拜访审核通过
+     */
+    NET_APPROVE_CRM_PLAN_SUCCESS,
+    /**
+     * 获取我的拜访列表成功
+     */
+    NET_GET_MYVISIT_LIST_SUCCESS,
+    NET_GET_MYVISIT_LIST_SUCCESS2,
+    /**
+     * 获取下属拜访列表成功
+     */
+    NET_GET_SUBVISIT_LIST_SUCCESS,
+    NET_GET_SUBVISIT_LIST_SUCCESS2,
+    /**
+     * 获取待审核列表成功
+     */
+    NET_GET_NEED_VISIT_LIST_SUCCESS,
+    NET_GET_STRING_TREE_DICT_SUCCESS,
+    NET_GET_PLANINFO_SUCCESS,
+    NET_GET_MTSUB_VISIT_SUCCESS,
+    NET_GET_PENDING_APPROVE_PLAN_LIST_SUCCESS,
+    NET_GET_PLAN_DETAIL_INFO_SUCCESS,
+    NET_PUT_CRM_RESULT_SUCCESS,
+    NET_MODIFY_PLAN_DETAIL_SUCCESS,
+    NET_REFRESH_VISIT_LIST,
+    NET_MODIFY_STRATEGY_SUCCESS,
+
+    NET_RECEIPT_SUCCESS,
+
+    NET_GET_BASEINFO_SUCCESS,
+    NET_GET_BASEINFO_LIST_SUCCESS,
+    NET_GET_BASEINFO_DETAIL_SUCCESS,
+    NET_GET_TEST_REQ_SUCCESS,
+    NET_GET_LLQR_SUCCESS,
+    NET_PASS_REPORT_SUCCESS,
+    NET_GET_SUB_DOC_DETAIL_SUCCESS,
+
+
+    NET_GET_SUB_DIFU_LIST_SUCCESS,
+    NET_GET_SUB_SUB_MEMBER_SUCCESS,
+    NET_GET_SUB_SUB_MEMBER_INFO_SUCCESS,
+    NET_GET_MEMBER_INFO_PARAMS_SUCCESS,
+    NET_GET_MEMBER_RESULTS_SUCCESS,
+
+    NET_GEN_INTERCHANGEINFO_SUCCESS,
+    NET_IMPROVE_INTERCHANGEINFO_SUCCESS,
+    NET_REPAID_INTERCHANGE_SUCCESS,
+    USER_POSITION_NORMAL,
+    USER_POSITION_SPECIAL,
+
+    NET_GET_SPEECHCAFT_HISTORIES_SUCCESS,
+
+    NET_INTENTION_SUBMIT_FAIL,
+    NET_INTENTION_SUBMIT_SUCCESS,
+
+    NET_REFERRALINTERATION_LIST_SUCCESS,
+    NET_REFERRALINTERATION_DETAIL_SUCCESS,
+    NET_REFRESH_INTENTION_LIST,
+
+    NET_GET_VISITHISTORIES_LIST_SUCCESS,
+    NET_GET_WORKMATES_LIS_SUCCESS,
+
+    NET_GET_PASSED_PUB_STRATEGIES_SUCCESS,
+    NET_ADD_PUB_STRATEGY_SUCCCESS,
+
+    NET_GET_ISFEATURE_COMPLETE_SUCCESS,
+    NET_GET_STRATEGY_LIBRARY_MODEL_SUCCESS,
+
+    NET_CRMPLANADDITION_SUCCESS,
+    NET_GET_STRATEGY_BY_MEMBERID_SUCCESS,
+    NET_GET_PAY_TYPE,
+    NET_GET_OTHER_PRODUCT_LIST_SUCCESS,
+    NET_GET_OTHER_PRODUCT_DETAIL_SUCCESS,
+    NET_GET_OTHER_PRODUCT_COMPUTE_SUCCESS,
+    NET_ADD_OTHER_PRODUCT_SUCCESS,
+    NET_OTHER_PRODUCT_SIGN_IN_SUCCESS,
+
+    NET_GET_CONFIRMPAYSTATE_SUCCESS,
+    NET_GET_PAY_QRCODE_SUCCESS,
+    NET_GET_PAY_METHOD_LIST_SUCCESS,
+
+    NET_GET_MYSUBCRMPLAN_STATISTICS_SUCCESS,
+    NET_GET_MYSUBCRMPLANGROUPBYOE_SUCCESS,
+    NET_GET_SUB_HOSPITAL_SUCCESS,
+
+    NET_GET_DICTTREEWITHSTRATEGY_SUCCESS,
+    NET_SAVE_MOBILE_INFO_SUCCESS,
+    NET_GET_NOTICEPIC_LIST_SUCCESS,
+
+    NET_GET_ALIPAY_MODEL_SUCCESS,
+    NET_GET_ALIPAY_SUCCESS,
+}
+
+

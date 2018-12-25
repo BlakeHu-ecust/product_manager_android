@@ -9,11 +9,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
+import java.util.Observable;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.Flowable;
-import io.reactivex.functions.Consumer;
+import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends Activity {
 
@@ -29,12 +32,8 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        Flowable.just("Hello world")
-                .subscribe(new Consumer<String>() {
-                    @Override public void accept(String s) {
-                        System.out.println(s);
-                    }
-                });
+
+
     }
 
     @OnClick({R.id.company_button, R.id.company_rootView})

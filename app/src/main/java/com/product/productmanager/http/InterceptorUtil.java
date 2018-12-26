@@ -2,7 +2,9 @@ package com.product.productmanager.http;
 
 import android.util.Log;
 
-import com.alibaba.fastjson.JSON;
+import com.product.productmanager.LoginActivity;
+import com.product.productmanager.Other.SharedPreferencesHelper;
+import com.product.productmanager.Other.Singleton;
 import com.product.productmanager.http.bean.BaseEntity;
 
 import java.io.IOException;
@@ -26,29 +28,6 @@ public class InterceptorUtil {
     private static String Token = "";
     public final static Charset UTF8 = Charset.forName("UTF-8");
 
-    /**
-     * token验证的拦截器
-     *
-     * @return
-     */
-    public static void tokenInterceptor1() {
-        new Interceptor() {
-            @Override
-            public Response intercept(Chain chain) throws IOException {
-                //拿到请求体,并添加header携带上token
-                Request mRequest = chain.request().newBuilder()
-                        .addHeader("Token", Token)
-                        .addHeader("enterprise", "a")
-                        .build();
-// 新的请求
-                Request.Builder requestBuilder = chain.request().newBuilder();
-                requestBuilder.method(chain.request().method(), chain.request().body());
-
-                return chain.proceed(requestBuilder.build());
-            }
-        };
-    }
-
     public static Interceptor tokenInterceptor() {
         return new Interceptor() {
             @Override
@@ -59,13 +38,18 @@ public class InterceptorUtil {
                  * 3.失效获取新的token
                  * 4.重新请求接口
                  */
-
                 //拿到请求体,并添加header携带上token
+                Log.d("CurrentTime",String.valueOf(System.currentTimeMillis()));
                 Request mRequest = chain.request().newBuilder()
-                        .addHeader("Token", Token)
-                        .addHeader("enterprise", "a")
+                        .addHeader("Accept", "application/json")
+                        .addHeader("Content-Type", "application/json; charset=utf-8")
+                        .addHeader("authorization", Singleton.instance.getToken())
+                        .addHeader("enterprise", Singleton.instance.getEnterprise())
+                        .addHeader("timestamp", String.valueOf(System.currentTimeMillis()))
+                        .addHeader("dbname","produce")
+                        .addHeader("dbip","47.105.135.107")
                         .build();
-
+                Log.d("CurrentHeader",mRequest.headers().toString());
                 //拿到响应体
                 Response mResponse = chain.proceed(mRequest);
                 ResponseBody responseBody = mResponse.body();
@@ -73,7 +57,7 @@ public class InterceptorUtil {
                 //得到缓冲源
                 BufferedSource source = responseBody.source();
                 //请求全部
-                source.request(Long.MAX_VALUE); // Buffer the entire body.
+                source.request(Long.MAX_VALUE);
 
                 return chain.proceed(mRequest);
             }

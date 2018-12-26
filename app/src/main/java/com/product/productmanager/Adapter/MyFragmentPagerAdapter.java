@@ -12,9 +12,9 @@ import com.product.productmanager.Tab.TabFragment3;
 
 public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
     private final int PAGER_COUNT = 3;
-    private TabFragment1 myFragment1 = null;
-    private TabFragment2 myFragment2 = null;
-    private TabFragment3 myFragment3 = null;
+    private TabFragment1 myFragment1;
+    private TabFragment2 myFragment2;
+    private TabFragment3 myFragment3;
 
 
     public MyFragmentPagerAdapter(FragmentManager fm) {
@@ -54,6 +54,8 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
             case HomeActivity.PAGE_THREE:
                 fragment = myFragment3;
                 break;
+                default:
+                    break;
         }
         return fragment;
     }

@@ -22,21 +22,18 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitFactory {
 
     private static RetrofitFactory mRetrofitFactory;
-    private static  APIFunction mAPIFunction;
+    private static APIFunction mAPIFunction;
     private RetrofitFactory(){
-        OkHttpClient mOkHttpClient=new OkHttpClient.Builder()
+        OkHttpClient mOkHttpClient = new OkHttpClient.Builder()
                 .connectTimeout(HttpConfig.HTTP_TIME, TimeUnit.SECONDS)
                 .readTimeout(HttpConfig.HTTP_TIME, TimeUnit.SECONDS)
                 .writeTimeout(HttpConfig.HTTP_TIME, TimeUnit.SECONDS)
-                .addInterceptor(new HttpCommonInterceptor.Builder()
-                        .addHeaderParams("timestamp",String.valueOf(System.currentTimeMillis()))
-                        .build())
                 .addInterceptor(InterceptorUtil.tokenInterceptor())
                 .build();
-        Retrofit mRetrofit=new Retrofit.Builder()
+        Retrofit mRetrofit = new Retrofit.Builder()
                 .baseUrl(HttpConfig.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())//添加gson转换器
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())//添加rxjava转换器
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(mOkHttpClient)
                 .build();
         mAPIFunction=mRetrofit.create(APIFunction.class);
@@ -46,8 +43,9 @@ public class RetrofitFactory {
     public static RetrofitFactory getInstence(){
         if (mRetrofitFactory==null){
             synchronized (RetrofitFactory.class) {
-                if (mRetrofitFactory == null)
+                if (mRetrofitFactory == null) {
                     mRetrofitFactory = new RetrofitFactory();
+                }
             }
 
         }

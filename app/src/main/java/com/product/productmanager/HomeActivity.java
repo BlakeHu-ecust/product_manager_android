@@ -77,6 +77,8 @@ public class HomeActivity extends AppCompatActivity implements RadioGroup.OnChec
                         case PAGE_THREE:
                             rb_better.setChecked(true);
                             break;
+                            default:
+                                break;
                     }
                 }
             }
@@ -95,6 +97,8 @@ public class HomeActivity extends AppCompatActivity implements RadioGroup.OnChec
             case R.id.rb_3:
                 mVp.setCurrentItem(PAGE_THREE);
                 break;
+                default:
+                    break;
         }
     }
 }

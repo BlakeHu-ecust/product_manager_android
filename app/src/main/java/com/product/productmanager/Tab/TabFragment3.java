@@ -21,7 +21,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-public class TabFragment3 extends Fragment {
+public class TabFragment3 extends BaseFragment {
     @BindView(R.id.tipsBar_1)
     View tipsBar1;
     @BindView(R.id.lin1)

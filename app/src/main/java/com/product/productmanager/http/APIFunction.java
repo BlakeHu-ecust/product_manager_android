@@ -5,6 +5,7 @@ import com.product.productmanager.http.bean.ABean;
 import com.product.productmanager.http.bean.BaseEntity;
 import com.product.productmanager.http.config.URLConfig;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -26,4 +27,6 @@ public interface APIFunction {
     @POST(URLConfig.login_url)
     Observable<BaseEntity<UserModel>> login(@Query("userName") String userName,@Query("password") String password,@Query("timestamp") String time);
 
+    @GET(URLConfig.findCount_url)
+    Observable<BaseEntity<String>> findCount(@Query("userId") String userId);
 }

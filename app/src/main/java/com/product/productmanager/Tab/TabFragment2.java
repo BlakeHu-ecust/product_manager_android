@@ -30,7 +30,7 @@ import butterknife.Unbinder;
 
 import static android.app.Activity.RESULT_OK;
 
-public class TabFragment2 extends Fragment {
+public class TabFragment2 extends BaseFragment {
     @BindView(R.id.scan_btn)
     Button scanBtn;
     @BindView(R.id.sm_listView)

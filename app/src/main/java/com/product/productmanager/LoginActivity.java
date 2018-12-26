@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 
 import com.product.productmanager.Model.UserModel;
 import com.product.productmanager.Other.SharedPreferencesHelper;
+import com.product.productmanager.Other.Singleton;
 import com.product.productmanager.Other.ToolClass;
 import com.product.productmanager.View.Loading_view;
 import com.product.productmanager.http.RetrofitFactory;
@@ -32,9 +33,6 @@ public class LoginActivity extends BaseActivity {
     Button loginButton;
     @BindView(R.id.login_rootView)
     LinearLayout loginRootView;
-
-    private static final String USER_NAME = "userName";
-    private static final String PASSWORD = "passWord";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +68,7 @@ public class LoginActivity extends BaseActivity {
                         .subscribe(new BaseObserver<UserModel>() {
                             @Override
                             protected void onSuccees(BaseEntity<UserModel> t) throws Exception {
-                                String name = t.getObject().getUserName();
+                                Singleton.instance.setUserModel(t.getObject());
                                 Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
                                 startActivity(intent);
                                 finish();
@@ -96,6 +94,8 @@ public class LoginActivity extends BaseActivity {
                 InputMethodManager mInputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
                 mInputMethodManager.hideSoftInputFromWindow(LoginActivity.this.getCurrentFocus().getWindowToken(), 0);
                 break;
+                default:
+                    break;
         }
     }
 }

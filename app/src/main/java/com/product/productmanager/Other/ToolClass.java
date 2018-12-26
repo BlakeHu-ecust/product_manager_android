@@ -7,6 +7,10 @@ import android.widget.Toast;
 import com.product.productmanager.R;
 import com.product.productmanager.View.Loading_view;
 
+import java.io.FileOutputStream;
+
+import static android.content.Context.MODE_APPEND;
+
 public class ToolClass {
     private static Loading_view loading;
     static public void showMessage(String message, Context context){
@@ -21,5 +25,6 @@ public class ToolClass {
     static public void progressDismisss(){
         loading.dismiss();
     }
+
 }
 

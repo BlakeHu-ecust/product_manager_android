@@ -5,7 +5,7 @@ import com.product.productmanager.Model.UserModel;
 public class Singleton {
     public static Singleton instance = new Singleton();
 
-    private UserModel userModel;
+    private UserModel userModel = new UserModel();
     private String token = "";
     private String enterprise;
 

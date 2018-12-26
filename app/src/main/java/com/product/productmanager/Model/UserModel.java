@@ -23,6 +23,15 @@ public class UserModel {
     private int type = 0;
     private String departmentId = "";
     private String token = "";
+    private db produceDb = new db();
+
+    public db getProduceDb() {
+        return produceDb;
+    }
+
+    public void setProduceDb(db produceDb) {
+        this.produceDb = produceDb;
+    }
 
     public String getId() {
         return id;
@@ -198,5 +207,26 @@ public class UserModel {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public class db{
+        private  String dbName = "";
+        private  String dbIp = "";
+
+        public String getDbName() {
+            return dbName;
+        }
+
+        public void setDbName(String dbName) {
+            this.dbName = dbName;
+        }
+
+        public String getDbIp() {
+            return dbIp;
+        }
+
+        public void setDbIp(String dbIp) {
+            this.dbIp = dbIp;
+        }
     }
 }

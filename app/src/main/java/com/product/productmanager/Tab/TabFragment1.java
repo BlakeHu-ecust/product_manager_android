@@ -12,17 +12,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.product.productmanager.GongdanListActivity;
-import com.product.productmanager.LoginActivity;
-import com.product.productmanager.Model.UserModel;
-import com.product.productmanager.Other.SharedPreferencesHelper;
+import com.product.productmanager.Model.home_current_model;
+import com.product.productmanager.Model.home_model;
 import com.product.productmanager.Other.Singleton;
 import com.product.productmanager.Other.ToolClass;
 import com.product.productmanager.R;
 import com.product.productmanager.http.RetrofitFactory;
 import com.product.productmanager.http.base.BaseObserver;
 import com.product.productmanager.http.bean.BaseEntity;
-
-import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -56,6 +53,20 @@ public class TabFragment1 extends BaseFragment {
     TextView nameLabel;
     @BindView(R.id.companyLabel)
     TextView companyLabel;
+    @BindView(R.id.time_ingText)
+    TextView timeIngText;
+    @BindView(R.id.lin_ing)
+    LinearLayout linIng;
+    @BindView(R.id.styleText)
+    TextView styleText;
+    @BindView(R.id.gongxuText)
+    TextView gongxuText;
+    @BindView(R.id.timeText)
+    TextView timeText;
+    @BindView(R.id.workText)
+    TextView workText;
+    @BindView(R.id.img_hand)
+    ImageView imgHand;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -65,27 +76,72 @@ public class TabFragment1 extends BaseFragment {
         return view;
     }
 
-    private void initView(){
-        Log.d("CurrentToken",Singleton.instance.getToken());
+    private void initView() {
+        Log.d("CurrentToken", Singleton.instance.getToken());
+        nameLabel.setText(Singleton.instance.getUserModel().getRealName());
+        companyLabel.setText(Singleton.instance.getUserModel().getAddress());
+
         RetrofitFactory.getInstence()
                 .API()
                 .findCount(Singleton.instance.getUserModel().getId())
-                .compose(this.<BaseEntity<String>>setThread())
-                .subscribe(new BaseObserver<String>() {
+                .compose(this.<BaseEntity<home_model>>setThread())
+                .subscribe(new BaseObserver<home_model>() {
                     @Override
-                    protected void onSuccees(BaseEntity<String> t) throws Exception {
-                        Log.d("123123",t.getObject());
+                    protected void onSuccees(BaseEntity<home_model> t) throws Exception {
+                        completeText.setText(t.getObject().getComplete());
+                        notCompleteText.setText(t.getObject().getUnComplete());
+                        currentText.setText(t.getObject().getTodayTotal());
+                        monthText.setText(t.getObject().getMonthComplete());
                     }
 
                     @Override
                     protected void onCodeError(BaseEntity t) throws Exception {
-                        ToolClass.showMessage(t.getMes(),getActivity());
+                        ToolClass.showMessage(t.getMes(), getActivity());
                     }
 
                     @Override
                     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-                        Log.e("NetError",e.toString());
-                        ToolClass.showMessage(e.getLocalizedMessage(),getActivity());
+                        Log.e("NetError", e.toString());
+                        ToolClass.showMessage(e.getLocalizedMessage(), getActivity());
+                    }
+                });
+
+        RetrofitFactory.getInstence()
+                .API()
+                .findNewWork(Singleton.instance.getUserModel().getId())
+                .compose(this.<BaseEntity<home_current_model>>setThread())
+                .subscribe(new BaseObserver<home_current_model>() {
+                    @Override
+                    protected void onSuccees(BaseEntity<home_current_model> t) throws Exception {
+                        home_current_model model = t.getObject();
+                        if (model.getId().length() > 0) {
+                            styleText.setText(model.getStyleName());
+                            gongxuText.setText(model.getName());
+                            timeText.setText("交货时间：" + model.getCompleteTime());
+                            linIng.setVisibility(View.VISIBLE);
+                            workText.setVisibility(View.GONE);
+                            imgHand.setVisibility(View.GONE);
+
+                        }
+                        else {
+                            linIng.setVisibility(View.GONE);
+                            styleText.setVisibility(View.GONE);
+                            gongxuText.setVisibility(View.GONE);
+                            timeText.setVisibility(View.GONE);
+
+                            workText.setVisibility(View.VISIBLE);
+                            imgHand.setVisibility(View.VISIBLE);
+                        }
+                    }
+
+                    @Override
+                    protected void onCodeError(BaseEntity t) throws Exception {
+                        ToolClass.showMessage(t.getMes(), getActivity());
+                    }
+
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                        ToolClass.showMessage(e.getLocalizedMessage(), getActivity());
                     }
                 });
     }

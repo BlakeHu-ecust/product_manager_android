@@ -1,12 +1,15 @@
 package com.product.productmanager.http;
 
 import com.product.productmanager.Model.UserModel;
+import com.product.productmanager.Model.home_current_model;
+import com.product.productmanager.Model.home_model;
 import com.product.productmanager.http.bean.ABean;
 import com.product.productmanager.http.bean.BaseEntity;
 import com.product.productmanager.http.config.URLConfig;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
@@ -28,5 +31,8 @@ public interface APIFunction {
     Observable<BaseEntity<UserModel>> login(@Query("userName") String userName,@Query("password") String password,@Query("timestamp") String time);
 
     @GET(URLConfig.findCount_url)
-    Observable<BaseEntity<String>> findCount(@Query("userId") String userId);
+    Observable<BaseEntity<home_model>> findCount(@Query("userId") String userId);
+
+    @GET(URLConfig.findNewWork_url)
+    Observable<BaseEntity<home_current_model>> findNewWork(@Query("userId") String userId);
 }

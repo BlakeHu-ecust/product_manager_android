@@ -46,8 +46,8 @@ public class InterceptorUtil {
                         .addHeader("authorization", Singleton.instance.getToken())
                         .addHeader("enterprise", Singleton.instance.getEnterprise())
                         .addHeader("timestamp", String.valueOf(System.currentTimeMillis()))
-                        .addHeader("dbname","produce")
-                        .addHeader("dbip","47.105.135.107")
+                        .addHeader("dbname",Singleton.instance.getUserModel().getProduceDb().getDbName())
+                        .addHeader("dbip",Singleton.instance.getUserModel().getProduceDb().getDbIp())
                         .build();
                 Log.d("CurrentHeader",mRequest.headers().toString());
                 //拿到响应体

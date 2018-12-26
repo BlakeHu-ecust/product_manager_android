@@ -19,6 +19,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
+
 public class TabFragment1 extends Fragment {
     @BindView(R.id.header)
     ImageView header;
@@ -76,6 +77,8 @@ public class TabFragment1 extends Fragment {
             case R.id.notComplete_lin:
                 intent.putExtra("Type",4);
                 break;
+                default:
+                    break;
         }
         startActivity(intent);
     }

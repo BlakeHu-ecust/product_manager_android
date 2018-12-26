@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="85dp"
+    android:layout_height="90dp"
     android:background="@android:color/transparent">
     <RelativeLayout
         android:id="@+id/item_body"
@@ -50,11 +50,11 @@
 
         <ImageView
             android:id="@+id/tip_img"
-            android:layout_width="10dp"
-            android:layout_height="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="14dp"
+            android:layout_marginBottom="10dp"
             android:layout_toLeftOf="@+id/statusText"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@drawable/icon_ing" />
     </RelativeLayout>
 </LinearLayout>

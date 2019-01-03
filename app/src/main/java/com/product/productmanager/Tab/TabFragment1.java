@@ -17,6 +17,7 @@ import com.product.productmanager.Model.home_model;
 import com.product.productmanager.Other.Singleton;
 import com.product.productmanager.Other.ToolClass;
 import com.product.productmanager.R;
+import com.product.productmanager.UserActivity;
 import com.product.productmanager.http.RetrofitFactory;
 import com.product.productmanager.http.base.BaseObserver;
 import com.product.productmanager.http.bean.BaseEntity;
@@ -93,17 +94,6 @@ public class TabFragment1 extends BaseFragment {
                         currentText.setText(t.getObject().getTodayTotal());
                         monthText.setText(t.getObject().getMonthComplete());
                     }
-
-                    @Override
-                    protected void onCodeError(BaseEntity t) throws Exception {
-                        ToolClass.showMessage(t.getMes(), getActivity());
-                    }
-
-                    @Override
-                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-                        Log.e("NetError", e.toString());
-                        ToolClass.showMessage(e.getLocalizedMessage(), getActivity());
-                    }
                 });
 
         RetrofitFactory.getInstence()
@@ -121,7 +111,6 @@ public class TabFragment1 extends BaseFragment {
                             linIng.setVisibility(View.VISIBLE);
                             workText.setVisibility(View.GONE);
                             imgHand.setVisibility(View.GONE);
-
                         }
                         else {
                             linIng.setVisibility(View.GONE);
@@ -132,16 +121,6 @@ public class TabFragment1 extends BaseFragment {
                             workText.setVisibility(View.VISIBLE);
                             imgHand.setVisibility(View.VISIBLE);
                         }
-                    }
-
-                    @Override
-                    protected void onCodeError(BaseEntity t) throws Exception {
-                        ToolClass.showMessage(t.getMes(), getActivity());
-                    }
-
-                    @Override
-                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-                        ToolClass.showMessage(e.getLocalizedMessage(), getActivity());
                     }
                 });
     }
@@ -157,25 +136,29 @@ public class TabFragment1 extends BaseFragment {
         Intent intent = new Intent(getActivity(), GongdanListActivity.class);
         switch (view.getId()) {
             case R.id.header:
+                intent = new Intent(getActivity(),UserActivity.class);
+                startActivity(intent);
                 break;
             case R.id.current_lin:
                 intent.putExtra("Type", 0);
                 break;
             case R.id.today_lin:
                 intent.putExtra("Type", 1);
+                startActivity(intent);
                 break;
             case R.id.complete_lin:
                 intent.putExtra("Type", 2);
+                startActivity(intent);
                 break;
             case R.id.month_lin:
-                intent.putExtra("Type", 3);
+                //intent.putExtra("Type", 3);
                 break;
             case R.id.notComplete_lin:
                 intent.putExtra("Type", 4);
+                startActivity(intent);
                 break;
             default:
                 break;
         }
-        startActivity(intent);
     }
 }

@@ -67,6 +67,8 @@ public class TabFragment2 extends BaseFragment {
                 break;
             case R.id.confirm_btn:
                 break;
+                default:
+                    break;
         }
     }
 

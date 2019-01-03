@@ -77,15 +77,14 @@ public class LoginActivity extends BaseActivity {
 
                             @Override
                             protected void onCodeError(BaseEntity<UserModel> t) throws Exception {
+                                super.onCodeError(t);
                                 ToolClass.progressDismisss();
-                                ToolClass.showMessage(t.getMes(),LoginActivity.this);
                             }
 
                             @Override
                             protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                                super.onFailure(e,isNetWorkError);
                                 ToolClass.progressDismisss();
-                                Log.e("Error",e.getLocalizedMessage());
-                                ToolClass.showMessage(e.getLocalizedMessage(),LoginActivity.this);
                             }
                         });
 

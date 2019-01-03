@@ -1,5 +1,7 @@
 package com.product.productmanager.Other;
 
+import android.content.Context;
+
 import com.product.productmanager.Model.UserModel;
 
 public class Singleton {
@@ -8,6 +10,24 @@ public class Singleton {
     private UserModel userModel = new UserModel();
     private String token = "";
     private String enterprise;
+
+    private Context context;
+
+    public static Singleton getInstance() {
+        return instance;
+    }
+
+    public static void setInstance(Singleton instance) {
+        Singleton.instance = instance;
+    }
+
+    public Context getContext() {
+        return context;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
+    }
 
     public UserModel getUserModel() {
         return userModel;

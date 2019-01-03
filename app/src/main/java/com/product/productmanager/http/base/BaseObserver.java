@@ -3,6 +3,8 @@ package com.product.productmanager.http.base;
 import android.accounts.NetworkErrorException;
 import android.content.Context;
 
+import com.product.productmanager.LoginActivity;
+import com.product.productmanager.Other.Singleton;
 import com.product.productmanager.Other.ToolClass;
 import com.product.productmanager.http.ProgressDialog;
 import com.product.productmanager.http.bean.BaseEntity;
@@ -85,7 +87,9 @@ public abstract class BaseObserver<T> implements Observer<BaseEntity<T>> {
      * @param t
      * @throws Exception
      */
-    protected abstract void onCodeError(BaseEntity<T> t) throws Exception;
+    protected void onCodeError(BaseEntity<T> t) throws Exception{
+        ToolClass.showMessage(t.getMes(),Singleton.instance.getContext());
+    }
 
     /**
      * 返回失败
@@ -94,7 +98,9 @@ public abstract class BaseObserver<T> implements Observer<BaseEntity<T>> {
      * @param isNetWorkError 是否是网络错误
      * @throws Exception
      */
-    protected abstract void onFailure(Throwable e, boolean isNetWorkError) throws Exception;
+    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception{
+        ToolClass.showMessage(e.getLocalizedMessage(),Singleton.instance.getContext());
+    }
 
     protected void onRequestStart() {
     }

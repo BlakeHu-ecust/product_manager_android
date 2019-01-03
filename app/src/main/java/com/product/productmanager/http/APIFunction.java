@@ -1,22 +1,19 @@
 package com.product.productmanager.http;
 
 import com.product.productmanager.Model.UserModel;
+import com.product.productmanager.Model.gd_model;
 import com.product.productmanager.Model.home_current_model;
 import com.product.productmanager.Model.home_model;
-import com.product.productmanager.http.bean.ABean;
+import com.product.productmanager.Model.listModel;
 import com.product.productmanager.http.bean.BaseEntity;
 import com.product.productmanager.http.config.URLConfig;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observable;
-import okhttp3.MultipartBody;
-import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
-import retrofit2.http.Part;
 import retrofit2.http.Query;
 
 /**
@@ -35,4 +32,16 @@ public interface APIFunction {
 
     @GET(URLConfig.findNewWork_url)
     Observable<BaseEntity<home_current_model>> findNewWork(@Query("userId") String userId);
+
+    @GET(URLConfig.findWorkOrderByList_url)
+    Observable<BaseEntity<listModel<gd_model>>> findWorkOrderByList(@Query("userId") String userId, @Query("page") Integer page, @Query("pageSize") Integer pageSize, @Query("type") Integer type);
+
+    @GET(URLConfig.findAllComplete_url)
+    Observable<BaseEntity<listModel<gd_model>>> findAllComplete(@Query("userId") String userId, @Query("page") Integer page, @Query("pageSize") Integer pageSize, @Query("type") Integer type);
+
+    @GET(URLConfig.findWorkOrderScanById_url)
+    Observable<BaseEntity<Map>> findWorkOrderScanById(@Query("userId") String userId, @Query("id") String id);
+
+    @GET(URLConfig.workOrderDetail_url)
+    Observable<BaseEntity<Object>> workOrderDetail(@Query("userId") String userId, @Query("id") String id);
 }

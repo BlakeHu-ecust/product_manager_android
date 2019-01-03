@@ -19,6 +19,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 public class BaseFragment extends Fragment {
+    protected static final Integer DEFAULT_SIZE = 10;
+
     public <T> ObservableTransformer<T,T> setThread(){
         return new ObservableTransformer<T,T>() {
             @Override

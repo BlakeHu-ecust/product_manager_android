@@ -18,9 +18,12 @@ public class orderProductDtoModel {
     private String price = "";
     private String urgentPrice = "";
     private String procesPrice = "";
-    private ArrayList<orderTrademarkListModel> orderTrademarkListModels = new ArrayList<>();//缝标集合信息
-    private ArrayList<orderEmbroideryListModel>orderEmbroideryList = new ArrayList<>();//刺绣集合信息
-    private ArrayList<orderChangeDressingListModel>orderChangeDressingList = new ArrayList<>();//工艺细节集合
+    //缝标集合信息
+    private ArrayList<orderTrademarkListModel> orderTrademarkListModels = new ArrayList<>();
+    //刺绣集合信息
+    private ArrayList<orderEmbroideryListModel>orderEmbroideryList = new ArrayList<>();
+    //工艺细节集合
+    private ArrayList<orderChangeDressingListModel>orderChangeDressingList = new ArrayList<>();
 
     public String getId() {
         return id;

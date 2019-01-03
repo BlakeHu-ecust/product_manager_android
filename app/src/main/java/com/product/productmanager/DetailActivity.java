@@ -32,56 +32,56 @@ public class DetailActivity extends BaseActivity {
         ButterKnife.bind(this);
         String id = getIntent().getStringExtra("id");
         if (id.length() > 0) {
-            OkHttpClient okHttpClient = new OkHttpClient();
-            HttpUrl.Builder urlBuilder = HttpUrl.parse(HttpConfig.BASE_URL + "userApp/workOrderDetail")
-                    .newBuilder();
-            urlBuilder.addQueryParameter("userId", Singleton.instance.getUserModel().getId());
-            urlBuilder.addQueryParameter("id",id);
-
-            final Request request = new Request.Builder()
-                    .url(urlBuilder.build())
-                    .addHeader("Accept", "application/json")
-                    .addHeader("Content-Type", "application/json; charset=utf-8")
-                    .addHeader("authorization", Singleton.instance.getToken())
-                    .addHeader("enterprise", Singleton.instance.getEnterprise())
-                    .addHeader("timestamp", String.valueOf(System.currentTimeMillis()))
-                    .addHeader("dbname",Singleton.instance.getUserModel().getProduceDb().getDbName())
-                    .addHeader("dbip",Singleton.instance.getUserModel().getProduceDb().getDbIp())
-                    .get()//默认就是GET请求，可以不写
-                    .build();
-            Call call = okHttpClient.newCall(request);
-            call.enqueue(new Callback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-                    String s = e.getLocalizedMessage();
-                }
-
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    String s = response.body().toString();
-                }
-            });
-
-//            RetrofitFactory.getInstence()
-//                    .API()
-//                    .workOrderDetail(Singleton.instance.getUserModel().getId(), id)
-//                    .compose(this.<BaseEntity<Object>>setThread())
-//                    .subscribe(new BaseObserver<Object>() {
-//                        @Override
-//                        protected void onSuccees(BaseEntity<Object> t) throws Exception {
-//                            String s = t.getMes();
-//                        }
+//            OkHttpClient okHttpClient = new OkHttpClient();
+//            HttpUrl.Builder urlBuilder = HttpUrl.parse(HttpConfig.BASE_URL + "userApp/workOrderDetail")
+//                    .newBuilder();
+//            urlBuilder.addQueryParameter("userId", Singleton.instance.getUserModel().getId());
+//            urlBuilder.addQueryParameter("id",id);
 //
-//                        @Override
-//                        protected void onCodeError(BaseEntity t) throws Exception {
-//                            ToolClass.showMessage(t.getMes(), DetailActivity.this);
-//                        }
+//            final Request request = new Request.Builder()
+//                    .url(urlBuilder.build())
+//                    .addHeader("Accept", "application/json")
+//                    .addHeader("Content-Type", "application/json; charset=utf-8")
+//                    .addHeader("authorization", Singleton.instance.getToken())
+//                    .addHeader("enterprise", Singleton.instance.getEnterprise())
+//                    .addHeader("timestamp", String.valueOf(System.currentTimeMillis()))
+//                    .addHeader("dbname",Singleton.instance.getUserModel().getProduceDb().getDbName())
+//                    .addHeader("dbip",Singleton.instance.getUserModel().getProduceDb().getDbIp())
+//                    .get()//默认就是GET请求，可以不写
+//                    .build();
+//            Call call = okHttpClient.newCall(request);
+//            call.enqueue(new Callback() {
+//                @Override
+//                public void onFailure(Call call, IOException e) {
+//                    String s = e.getLocalizedMessage();
+//                }
 //
-//                        @Override
-//                        protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-//                            ToolClass.showMessage(e.getLocalizedMessage(), DetailActivity.this);
-//                        }
-//                    });
+//                @Override
+//                public void onResponse(Call call, Response response) throws IOException {
+//                    String s = response.body().toString();
+//                }
+//            });
+
+            RetrofitFactory.getInstence()
+                    .API()
+                    .workOrderDetail(Singleton.instance.getUserModel().getId(), id)
+                    .compose(this.<BaseEntity<Object>>setThread())
+                    .subscribe(new BaseObserver<Object>() {
+                        @Override
+                        protected void onSuccees(BaseEntity<Object> t) throws Exception {
+                            String s = t.getMes();
+                        }
+
+                        @Override
+                        protected void onCodeError(BaseEntity t) throws Exception {
+                            ToolClass.showMessage(t.getMes(), DetailActivity.this);
+                        }
+
+                        @Override
+                        protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
+                            ToolClass.showMessage(e.getLocalizedMessage(), DetailActivity.this);
+                        }
+                    });
         } else {
             ToolClass.showMessage("工单id为空", DetailActivity.this);
             finish();

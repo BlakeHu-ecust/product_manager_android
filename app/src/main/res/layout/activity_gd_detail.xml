@@ -99,66 +99,70 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
                 <TextView
+                    android:id="@+id/detail_text_orderNo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="单         号："
                     android:layout_marginTop="10dp"
                     android:layout_marginLeft="10dp"/>
                 <TextView
+                    android:id="@+id/detail_text_deveTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="交货时间："
                     android:layout_marginTop="10dp"
                     android:layout_marginLeft="10dp"/>
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="交货时间："
-                    android:layout_marginTop="10dp"
-                    android:layout_marginLeft="10dp"/>
-                <TextView
+                    android:id="@+id/detail_textgx"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="工         序："
                     android:layout_marginTop="10dp"
                     android:layout_marginLeft="10dp"/>
                 <TextView
+                    android:id="@+id/detail_text_completeTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="完成时间："
                     android:layout_marginTop="10dp"
                     android:layout_marginLeft="10dp"/>
                 <TextView
+                    android:id="@+id/detail_text_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="用         时："
                     android:layout_marginTop="10dp"
                     android:layout_marginLeft="10dp"/>
                 <TextView
+                    android:id="@+id/detail_text_remark"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="备         注："
                     android:layout_marginTop="10dp"
                     android:layout_marginLeft="10dp"/>
                 <TextView
+                    android:id="@+id/detail_text_mianliao"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="面料信息："
                     android:layout_marginTop="10dp"
                     android:layout_marginLeft="10dp"/>
                 <TextView
+                    android:id="@+id/detail_text_banxin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="版         型："
                     android:layout_marginTop="10dp"
                     android:layout_marginLeft="10dp"/>
                 <TextView
+                    android:id="@+id/detail_text_gongyi"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="工艺要求："
                     android:layout_marginTop="10dp"
                     android:layout_marginLeft="10dp"/>
                 <TextView
+                    android:id="@+id/detail_text_shiyi"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="试衣要求："

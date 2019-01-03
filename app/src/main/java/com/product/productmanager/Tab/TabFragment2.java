@@ -19,9 +19,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.product.productmanager.HomeActivity;
+import com.product.productmanager.LoginActivity;
+import com.product.productmanager.Model.gd_model;
+import com.product.productmanager.Model.listModel;
+import com.product.productmanager.Other.Singleton;
 import com.product.productmanager.Other.ToolClass;
 import com.product.productmanager.R;
+import com.product.productmanager.http.RetrofitFactory;
+import com.product.productmanager.http.base.BaseObserver;
+import com.product.productmanager.http.bean.BaseEntity;
 import com.product.productmanager.scanner.CaptureActivity;
+
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -101,7 +110,17 @@ public class TabFragment2 extends BaseFragment {
                      */
                     String s = data.getStringExtra("qrCode");
                     Log.d("QRCode",s);
+                    ToolClass.showProgress(getActivity());
+                    RetrofitFactory.getInstence()
+                            .API()
+                            .findWorkOrderScanById(Singleton.instance.getUserModel().getId(), s)
+                            .compose(this.<BaseEntity<Map>>setThread())
+                            .subscribe(new BaseObserver<Map>() {
+                                @Override
+                                protected void onSuccees(BaseEntity<Map> t) throws Exception {
 
+                                }
+                            });
                 }
                 break;
             default:

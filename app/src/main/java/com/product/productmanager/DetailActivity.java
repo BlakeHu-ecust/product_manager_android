@@ -2,29 +2,59 @@ package com.product.productmanager;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.TextView;
 
+import com.product.productmanager.Model.orderProductModel;
 import com.product.productmanager.Other.Singleton;
 import com.product.productmanager.Other.ToolClass;
 import com.product.productmanager.http.RetrofitFactory;
 import com.product.productmanager.http.base.BaseObserver;
 import com.product.productmanager.http.bean.BaseEntity;
-import com.product.productmanager.http.config.HttpConfig;
-import com.product.productmanager.http.config.URLConfig;
 
-import java.io.IOException;
-import java.util.Map;
-
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.HttpUrl;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 public class DetailActivity extends BaseActivity {
+    @BindView(R.id.btn_back)
+    Button btnBack;
+    @BindView(R.id.lin_back)
+    LinearLayout linBack;
+    @BindView(R.id.titleText)
+    TextView titleText;
+    @BindView(R.id.detail_clickComplete)
+    LinearLayout detailClickComplete;
+    @BindView(R.id.detail_complete)
+    LinearLayout detailComplete;
+    @BindView(R.id.detail_header)
+    LinearLayout detailHeader;
+    @BindView(R.id.detail_text_orderNo)
+    TextView detailTextOrderNo;
+    @BindView(R.id.detail_text_deveTime)
+    TextView detailTextDeveTime;
+    @BindView(R.id.detail_textgx)
+    TextView detailTextgx;
+    @BindView(R.id.detail_text_completeTime)
+    TextView detailTextCompleteTime;
+    @BindView(R.id.detail_text_time)
+    TextView detailTextTime;
+    @BindView(R.id.detail_text_remark)
+    TextView detailTextRemark;
+    @BindView(R.id.detail_text_mianliao)
+    TextView detailTextMianliao;
+    @BindView(R.id.detail_text_banxin)
+    TextView detailTextBanxin;
+    @BindView(R.id.detail_text_gongyi)
+    TextView detailTextGongyi;
+    @BindView(R.id.detail_text_shiyi)
+    TextView detailTextShiyi;
+    @BindView(R.id.detail_list)
+    ListView detailList;
+
+    private orderProductModel model = new orderProductModel();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,54 +62,15 @@ public class DetailActivity extends BaseActivity {
         ButterKnife.bind(this);
         String id = getIntent().getStringExtra("id");
         if (id.length() > 0) {
-//            OkHttpClient okHttpClient = new OkHttpClient();
-//            HttpUrl.Builder urlBuilder = HttpUrl.parse(HttpConfig.BASE_URL + "userApp/workOrderDetail")
-//                    .newBuilder();
-//            urlBuilder.addQueryParameter("userId", Singleton.instance.getUserModel().getId());
-//            urlBuilder.addQueryParameter("id",id);
-//
-//            final Request request = new Request.Builder()
-//                    .url(urlBuilder.build())
-//                    .addHeader("Accept", "application/json")
-//                    .addHeader("Content-Type", "application/json; charset=utf-8")
-//                    .addHeader("authorization", Singleton.instance.getToken())
-//                    .addHeader("enterprise", Singleton.instance.getEnterprise())
-//                    .addHeader("timestamp", String.valueOf(System.currentTimeMillis()))
-//                    .addHeader("dbname",Singleton.instance.getUserModel().getProduceDb().getDbName())
-//                    .addHeader("dbip",Singleton.instance.getUserModel().getProduceDb().getDbIp())
-//                    .get()//默认就是GET请求，可以不写
-//                    .build();
-//            Call call = okHttpClient.newCall(request);
-//            call.enqueue(new Callback() {
-//                @Override
-//                public void onFailure(Call call, IOException e) {
-//                    String s = e.getLocalizedMessage();
-//                }
-//
-//                @Override
-//                public void onResponse(Call call, Response response) throws IOException {
-//                    String s = response.body().toString();
-//                }
-//            });
-
             RetrofitFactory.getInstence()
                     .API()
                     .workOrderDetail(Singleton.instance.getUserModel().getId(), id)
-                    .compose(this.<BaseEntity<Object>>setThread())
-                    .subscribe(new BaseObserver<Object>() {
+                    .compose(this.<BaseEntity<orderProductModel>>setThread())
+                    .subscribe(new BaseObserver<orderProductModel>() {
                         @Override
-                        protected void onSuccees(BaseEntity<Object> t) throws Exception {
-                            String s = t.getMes();
-                        }
-
-                        @Override
-                        protected void onCodeError(BaseEntity t) throws Exception {
-                            ToolClass.showMessage(t.getMes(), DetailActivity.this);
-                        }
-
-                        @Override
-                        protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-                            ToolClass.showMessage(e.getLocalizedMessage(), DetailActivity.this);
+                        protected void onSuccees(BaseEntity<orderProductModel> t) throws Exception {
+                            model = t.getObject();
+                            setUI();
                         }
                     });
         } else {
@@ -88,8 +79,29 @@ public class DetailActivity extends BaseActivity {
         }
     }
 
-    @OnClick({R.id.btn_back, R.id.lin_back})
-    public void onClick(View view) {
+    private void setUI(){
+        titleText.setText(model.getName());
+        detailTextOrderNo.setText(detailTextOrderNo.getText().toString() + model.getWorkOrderCode());
+        detailTextgx.setText(detailTextgx.getText().toString() + model.getProcessName());
+        detailTextBanxin.setText(detailTextBanxin.getText().toString() + model.getVersionType());
+        detailTextRemark.setText(detailTextRemark.getText().toString() + model.getRemark());
+        detailTextCompleteTime.setText(detailTextCompleteTime.getText().toString() + model.getEndTime());
+        detailTextGongyi.setText(detailTextGongyi.getText().toString() + model.getTechnology());
+        detailTextShiyi.setText(detailTextShiyi.getText().toString() + (model.getFittingRequire() == 0 ? "不试衣" : "试衣"));
+        String tem = "";
+        for (int i = 0;i < model.getOrderfabricList().size();i++){
+            orderProductModel.orderfabricListModel m = model.getOrderfabricList().get(i);
+            if (i == 0){
+                tem += m.getValue();
+            }
+            else{
+                tem += "，" + m.getValue();
+            }
+        }
+        detailTextMianliao.setText(detailTextMianliao.getText().toString() + tem);
+    }
+    @OnClick({R.id.btn_back, R.id.lin_back, R.id.detail_clickComplete, R.id.detail_complete})
+    public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_back:
                 finish();
@@ -97,8 +109,10 @@ public class DetailActivity extends BaseActivity {
             case R.id.lin_back:
                 finish();
                 break;
-                default:
-                    break;
+            case R.id.detail_clickComplete:
+                break;
+            case R.id.detail_complete:
+                break;
         }
     }
 }

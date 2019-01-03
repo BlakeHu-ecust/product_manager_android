@@ -5,6 +5,8 @@ import com.product.productmanager.Model.gd_model;
 import com.product.productmanager.Model.home_current_model;
 import com.product.productmanager.Model.home_model;
 import com.product.productmanager.Model.listModel;
+import com.product.productmanager.Model.orderProductDtoModel;
+import com.product.productmanager.Model.orderProductModel;
 import com.product.productmanager.http.bean.BaseEntity;
 import com.product.productmanager.http.config.URLConfig;
 
@@ -43,5 +45,5 @@ public interface APIFunction {
     Observable<BaseEntity<Map>> findWorkOrderScanById(@Query("userId") String userId, @Query("id") String id);
 
     @GET(URLConfig.workOrderDetail_url)
-    Observable<BaseEntity<Object>> workOrderDetail(@Query("userId") String userId, @Query("id") String id);
+    Observable<BaseEntity<orderProductModel>> workOrderDetail(@Query("userId") String userId, @Query("id") String id);
 }

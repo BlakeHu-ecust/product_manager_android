@@ -87,7 +87,7 @@ public class TabFragment3 extends BaseFragment {
                     refreshData();
                 }
                 else{
-                    refreshLayout.finishLoadMoreWithNoMoreData();
+                    refreshLayout.finishLoadMore();
                 }
             }
         });
@@ -109,18 +109,12 @@ public class TabFragment3 extends BaseFragment {
                         arrayList.addAll(listModel.getContent());
                         listViewAdapter.notifyDataSetChanged();
                         refreshLayout.finishRefresh();
-                        if (currentPage < listModel.getPage().getTotalPage()){
-                            refreshLayout.finishLoadMore();
-                        }
-                        else{
-                            refreshLayout.finishLoadMoreWithNoMoreData();
-                        }
-//                        if (listModel.getContent().size() < DEFAULT_SIZE){
-//                            refreshLayout.finishLoadMoreWithNoMoreData();
-//                            refreshLayout.setEnableAutoLoadMore(false);
-//                        }
-//                        else {
+                        refreshLayout.finishLoadMore();
+//                        if (currentPage < listModel.getPage().getTotalPage()){
 //                            refreshLayout.finishLoadMore();
+//                        }
+//                        else{
+//                            refreshLayout.finishLoadMoreWithNoMoreData();
 //                        }
                     }
                 });

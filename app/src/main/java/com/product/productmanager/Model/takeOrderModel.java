@@ -21,4 +21,16 @@ public class takeOrderModel {
     public void setIdList(ArrayList<String> idList) {
         this.idList = idList;
     }
+
+    public static class paramModel{
+        private takeOrderModel param;
+
+        public takeOrderModel getParam() {
+            return param;
+        }
+
+        public void setParam(takeOrderModel param) {
+            this.param = param;
+        }
+    }
 }

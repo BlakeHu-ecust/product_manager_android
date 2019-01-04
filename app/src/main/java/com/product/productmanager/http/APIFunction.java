@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import io.reactivex.Observable;
+import okhttp3.RequestBody;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
@@ -51,5 +52,5 @@ public interface APIFunction {
     Observable<BaseEntity<orderProductModel>> workOrderDetail(@Query("userId") String userId, @Query("id") String id);
 
     @POST(URLConfig.takeOrder_url)
-    Observable<BaseEntity<Map>> takeOrder(@Body Map param);
+    Observable<BaseEntity<Map>> takeOrder(@Body String requestBody);
 }

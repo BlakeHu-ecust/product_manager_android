@@ -47,6 +47,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -114,6 +116,9 @@ public class TabFragment2 extends BaseFragment {
                 for (orderProductModel m : arrayList){
                     model.getIdList().add(m.getId());
                 }
+
+                takeOrderModel.paramModel param = new takeOrderModel.paramModel();
+                param.setParam(model);
                 Gson gson = new Gson();
                 String data = gson.toJson(model,takeOrderModel.class);
 
@@ -125,19 +130,19 @@ public class TabFragment2 extends BaseFragment {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
-
-                Map map1 = new HashMap();
-                map1.put("id",Singleton.instance.getUserModel().getId());
-                map1.put("idList",model.getIdList());
-
-                Map map = new HashMap();
-                map.put("param",map1);
+//
+//
+//                Map map1 = new HashMap();
+//                map1.put("id",Singleton.instance.getUserModel().getId());
+//                map1.put("idList",model.getIdList());
+//
+//                Map map = new HashMap();
+//                map.put("param",data);
 
                 ToolClass.showProgress(getActivity());
                 RetrofitFactory.getInstence()
                         .API()
-                        .takeOrder(map)
+                        .takeOrder(data)
                         .compose(this.<BaseEntity<Map>>setThread())
                         .subscribe(new BaseObserver<Map>() {
                             @Override

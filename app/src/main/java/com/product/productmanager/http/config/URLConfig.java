@@ -8,4 +8,5 @@ public interface URLConfig {
     String findAllComplete_url = "userApp/findAllComplete";
     String findWorkOrderScanById_url = "userApp/findWorkOrderScanById";
     String workOrderDetail_url = "userApp/workOrderDetail";
+    String takeOrder_url = "userApp/takeOrder";
 }

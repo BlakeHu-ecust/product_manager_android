@@ -30,6 +30,15 @@ public class orderProductModel {
     private int completeProcessNum;
     private ArrayList<orderfabricListModel> orderfabricList = new ArrayList<>();
     private orderProductDtoModel orderProductDto = new orderProductDtoModel();
+    private boolean choosed = false;
+
+    public boolean isChoosed() {
+        return choosed;
+    }
+
+    public void setChoosed(boolean choosed) {
+        this.choosed = choosed;
+    }
 
     public String getId() {
         return id;

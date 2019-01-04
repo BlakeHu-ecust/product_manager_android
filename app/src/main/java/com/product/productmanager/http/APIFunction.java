@@ -10,10 +10,13 @@ import com.product.productmanager.Model.orderProductModel;
 import com.product.productmanager.http.bean.BaseEntity;
 import com.product.productmanager.http.config.URLConfig;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Map;
 
 import io.reactivex.Observable;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
@@ -42,8 +45,11 @@ public interface APIFunction {
     Observable<BaseEntity<listModel<gd_model>>> findAllComplete(@Query("userId") String userId, @Query("page") Integer page, @Query("pageSize") Integer pageSize, @Query("type") Integer type);
 
     @GET(URLConfig.findWorkOrderScanById_url)
-    Observable<BaseEntity<Map>> findWorkOrderScanById(@Query("userId") String userId, @Query("id") String id);
+    Observable<BaseEntity<orderProductModel>> findWorkOrderScanById(@Query("userId") String userId, @Query("id") String id);
 
     @GET(URLConfig.workOrderDetail_url)
     Observable<BaseEntity<orderProductModel>> workOrderDetail(@Query("userId") String userId, @Query("id") String id);
+
+    @POST(URLConfig.takeOrder_url)
+    Observable<BaseEntity<Map>> takeOrder(@Body Map param);
 }

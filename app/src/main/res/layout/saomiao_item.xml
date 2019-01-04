@@ -10,6 +10,7 @@
         android:layout_height="match_parent"
         android:layout_marginHorizontal="10dp"
         android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
         android:background="@drawable/home_frame1_shape">
 
         <TextView
@@ -42,11 +43,11 @@
             android:text="12132123"
             android:textColor="#7f7f7f"
             android:textSize="14sp" />
-        <Button
+        <ImageView
             android:id="@+id/choose_state_btn"
             android:layout_width="18dp"
             android:layout_height="18dp"
-            android:background="@drawable/icon_choose"
+            android:src="@drawable/icon_choose"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"/>
         <TextView
@@ -61,17 +62,24 @@
             android:textColor="#7f7f7f"
             android:textSize="14sp"
             android:paddingLeft="5dp"/>
-        <TextView
-            android:id="@+id/reason_text"
+        <RelativeLayout
+            android:id="@+id/urgent_lin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:text="12132123"
-            android:textColor="#7f7f7f"
-            android:textSize="14sp"
-            android:paddingLeft="5dp"/>
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="10dp">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_quick"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="加急"
+                android:textColor="@android:color/white"
+                android:textSize="14sp"
+                android:layout_centerInParent="true"/>
+        </RelativeLayout>
     </RelativeLayout>
 </LinearLayout>

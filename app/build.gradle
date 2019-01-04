@@ -42,7 +42,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
     //配合Rxjava 使用
     implementation 'com.google.zxing:core:3.3.3'
-
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.4.1'
     implementation 'org.greenrobot:eventbus:3.0.0'
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.5.1'
     implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.0.5.1'//没有使用特殊Header，可以不加这行

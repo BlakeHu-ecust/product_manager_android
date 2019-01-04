@@ -39,7 +39,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="共3个产品，已选择2个"
+                android:text="共0个产品，已选择0个"
                 android:layout_marginLeft="40dp"
                 android:layout_gravity="center_vertical"/>
             <Button

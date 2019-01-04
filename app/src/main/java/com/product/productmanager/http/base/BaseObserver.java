@@ -88,6 +88,7 @@ public abstract class BaseObserver<T> implements Observer<BaseEntity<T>> {
      * @throws Exception
      */
     protected void onCodeError(BaseEntity<T> t) throws Exception{
+        ToolClass.progressDismisss();
         ToolClass.showMessage(t.getMes(),Singleton.instance.getContext());
     }
 
@@ -99,6 +100,7 @@ public abstract class BaseObserver<T> implements Observer<BaseEntity<T>> {
      * @throws Exception
      */
     protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception{
+        ToolClass.progressDismisss();
         ToolClass.showMessage(e.getLocalizedMessage(),Singleton.instance.getContext());
     }
 

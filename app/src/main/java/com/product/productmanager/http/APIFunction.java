@@ -52,5 +52,5 @@ public interface APIFunction {
     Observable<BaseEntity<orderProductModel>> workOrderDetail(@Query("userId") String userId, @Query("id") String id);
 
     @POST(URLConfig.takeOrder_url)
-    Observable<BaseEntity<Map>> takeOrder(@Body String requestBody);
+    Observable<BaseEntity<Map>> takeOrder(@Body RequestBody requestBody);
 }

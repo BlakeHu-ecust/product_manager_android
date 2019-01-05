@@ -4,7 +4,16 @@ import java.util.ArrayList;
 
 public class takeOrderModel {
     private String id;
-    private ArrayList<String> idList = new ArrayList<>();
+    //private ArrayList<String> idList = new ArrayList<>();
+    private String[] idList;
+
+    public String[] getIdList() {
+        return idList;
+    }
+
+    public void setIdList(String[] idList) {
+        this.idList = idList;
+    }
 
     public String getId() {
         return id;
@@ -14,13 +23,13 @@ public class takeOrderModel {
         this.id = id;
     }
 
-    public ArrayList<String> getIdList() {
-        return idList;
-    }
-
-    public void setIdList(ArrayList<String> idList) {
-        this.idList = idList;
-    }
+//    public ArrayList<String> getIdList() {
+//        return idList;
+//    }
+//
+//    public void setIdList(ArrayList<String> idList) {
+//        this.idList = idList;
+//    }
 
     public static class paramModel{
         private takeOrderModel param;

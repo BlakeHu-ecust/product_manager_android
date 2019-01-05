@@ -107,43 +107,35 @@ public class TabFragment2 extends BaseFragment {
              }
                 break;
             case R.id.confirm_btn:
-                if (arrayList.size() == 0){
+                ArrayList<orderProductModel> tem = new ArrayList<>();
+                for (orderProductModel m : arrayList){
+                    if (m.isChoosed()) {
+                        tem.add(m);
+                    }
+                }
+
+                if (tem.size() == 0){
                     ToolClass.showMessage("请选择工单",getActivity());
                     return;
                 }
                 takeOrderModel model = new takeOrderModel();
                 model.setId(Singleton.instance.getUserModel().getId());
-                for (orderProductModel m : arrayList){
-                    model.getIdList().add(m.getId());
-                }
 
-                takeOrderModel.paramModel param = new takeOrderModel.paramModel();
-                param.setParam(model);
+                String[] array = new String[tem.size()];
+                for (int i = 0;i < tem.size();i++){
+                    array[i] = tem.get(i).getId();
+                }
+                model.setIdList(array);
+
                 Gson gson = new Gson();
                 String data = gson.toJson(model,takeOrderModel.class);
 
-                JSONObject object = new JSONObject();
-                try {
-                    object.put("id",Singleton.instance.getUserModel().getId());
-                    object.put("idList",model.getIdList());
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-//
-//
-//                Map map1 = new HashMap();
-//                map1.put("id",Singleton.instance.getUserModel().getId());
-//                map1.put("idList",model.getIdList());
-//
-//                Map map = new HashMap();
-//                map.put("param",data);
-
-                //RequestBody requestBody = RequestBody.create(MediaType.parse(""),data);
+                RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"),data);
                 ToolClass.showProgress(getActivity());
                 RetrofitFactory.getInstence()
                         .API()
-                        .takeOrder(data)
+                        .takeOrder(requestBody)
                         .compose(this.<BaseEntity<Map>>setThread())
                         .subscribe(new BaseObserver<Map>() {
                             @Override

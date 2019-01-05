@@ -139,6 +139,7 @@ public class TabFragment2 extends BaseFragment {
 //                Map map = new HashMap();
 //                map.put("param",data);
 
+                //RequestBody requestBody = RequestBody.create(MediaType.parse(""),data);
                 ToolClass.showProgress(getActivity());
                 RetrofitFactory.getInstence()
                         .API()

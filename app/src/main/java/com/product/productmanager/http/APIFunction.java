@@ -2,6 +2,7 @@ package com.product.productmanager.http;
 
 import com.product.productmanager.Model.UserModel;
 import com.product.productmanager.Model.gd_model;
+import com.product.productmanager.Model.gongxuModel;
 import com.product.productmanager.Model.home_current_model;
 import com.product.productmanager.Model.home_model;
 import com.product.productmanager.Model.listModel;
@@ -20,6 +21,7 @@ import okhttp3.RequestBody;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Query;
 
 /**
@@ -53,4 +55,10 @@ public interface APIFunction {
 
     @POST(URLConfig.takeOrder_url)
     Observable<BaseEntity<Map>> takeOrder(@Body RequestBody requestBody);
+
+    @POST(URLConfig.changePwd_url)
+    Observable<BaseEntity<Map>> changePwd(@Query("id") String userId,@Query("oldPassword") String oldPassword,@Query("newPassword") String newPassword);
+
+    @GET(URLConfig.workOrderProcess_url)
+    Observable<BaseEntity<ArrayList<gongxuModel>>> workOrderProcess(@Query("styleId") String styleId);
 }

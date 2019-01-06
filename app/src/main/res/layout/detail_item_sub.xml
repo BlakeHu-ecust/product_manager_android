@@ -2,28 +2,32 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="40dp">
+    android:layout_height="30dp"
+    android:background="@drawable/list_item_shape_sub">
     <TextView
+        android:id="@+id/textLeft"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:textSize="14sp"
-        android:textColor="#323232"
+        android:textColor="#606060"
         android:gravity="left|center_vertical"
         android:layout_marginLeft="15dp"/>
     <TextView
+        android:id="@+id/textMiddle"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:textSize="14sp"
-        android:textColor="#323232"
+        android:textColor="#606060"
         android:gravity="center"/>
     <TextView
+        android:id="@+id/textRight"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:textSize="14sp"
-        android:textColor="#323232"
+        android:textColor="#606060"
         android:gravity="right|center_vertical"
         android:layout_marginRight="15dp"/>
 </LinearLayout>

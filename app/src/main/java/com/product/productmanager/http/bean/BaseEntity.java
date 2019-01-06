@@ -11,7 +11,15 @@ public class BaseEntity<T> {
     private int status;
     private String mes;
     private T object;
+    private String message;
 
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
     public boolean isSuccess(){
         return getStatus() == SUCCESS_CODE;

@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.product.productmanager.DetailActivity;
 import com.product.productmanager.GongdanListActivity;
 import com.product.productmanager.Model.home_current_model;
 import com.product.productmanager.Model.home_model;
@@ -69,6 +70,7 @@ public class TabFragment1 extends BaseFragment {
     @BindView(R.id.img_hand)
     ImageView imgHand;
 
+    private home_current_model model = new home_current_model();
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.layout_tab_1, null);
@@ -103,7 +105,7 @@ public class TabFragment1 extends BaseFragment {
                 .subscribe(new BaseObserver<home_current_model>() {
                     @Override
                     protected void onSuccees(BaseEntity<home_current_model> t) throws Exception {
-                        home_current_model model = t.getObject();
+                        model = t.getObject();
                         if (model.getId().length() > 0) {
                             styleText.setText(model.getStyleName());
                             gongxuText.setText(model.getName());
@@ -140,7 +142,9 @@ public class TabFragment1 extends BaseFragment {
                 startActivity(intent);
                 break;
             case R.id.current_lin:
-                intent.putExtra("Type", 0);
+                intent = new Intent(getActivity(),DetailActivity.class);
+                intent.putExtra("id",model.getId());
+                startActivity(intent);
                 break;
             case R.id.today_lin:
                 intent.putExtra("Type", 1);

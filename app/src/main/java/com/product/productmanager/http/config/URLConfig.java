@@ -9,4 +9,6 @@ public interface URLConfig {
     String findWorkOrderScanById_url = "userApp/findWorkOrderScanById";
     String workOrderDetail_url = "userApp/workOrderDetail";
     String takeOrder_url = "userApp/takeOrder";
+    String changePwd_url = "user/modifyPasswordByPeople";
+    String workOrderProcess_url = "userApp/workOrderProcess";
 }

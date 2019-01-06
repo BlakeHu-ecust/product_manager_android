@@ -2,6 +2,7 @@ package com.product.productmanager.http.base;
 
 import android.accounts.NetworkErrorException;
 import android.content.Context;
+import android.util.Log;
 
 import com.product.productmanager.LoginActivity;
 import com.product.productmanager.Other.Singleton;
@@ -15,6 +16,8 @@ import java.util.concurrent.TimeoutException;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
+
+import static com.product.productmanager.http.InterceptorUtil.TAG;
 
 public abstract class BaseObserver<T> implements Observer<BaseEntity<T>> {
     protected Context mContext;
@@ -53,7 +56,7 @@ public abstract class BaseObserver<T> implements Observer<BaseEntity<T>> {
 
     @Override
     public void onError(Throwable e) {
-//        Log.w(TAG, "onError: ", );这里可以打印错误信息
+        //Log.w(TAG, "onError: ", e.getCause());这里可以打印错误信息
         onRequestEnd();
         try {
             if (e instanceof ConnectException

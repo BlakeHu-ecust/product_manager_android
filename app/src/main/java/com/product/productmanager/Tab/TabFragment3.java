@@ -1,14 +1,17 @@
 package com.product.productmanager.Tab;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.product.productmanager.Adapter.ListViewAdapter;
+import com.product.productmanager.DetailActivity;
 import com.product.productmanager.Model.gd_model;
 import com.product.productmanager.Model.listModel;
 import com.product.productmanager.Other.Singleton;
@@ -94,6 +97,14 @@ public class TabFragment3 extends BaseFragment {
 
         listViewAdapter = new ListViewAdapter(arrayList, getContext());
         listView.setAdapter(listViewAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getActivity(),DetailActivity.class);
+                intent.putExtra("id",arrayList.get(position).getId());
+                startActivity(intent);
+            }
+        });
         refrshBar(selectedNum);
     }
 

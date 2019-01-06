@@ -31,24 +31,34 @@ import com.product.productmanager.Model.takeOrderModel;
 import com.product.productmanager.Other.Singleton;
 import com.product.productmanager.Other.ToolClass;
 import com.product.productmanager.R;
+import com.product.productmanager.http.InterceptorUtil;
 import com.product.productmanager.http.RetrofitFactory;
 import com.product.productmanager.http.base.BaseObserver;
 import com.product.productmanager.http.bean.BaseEntity;
+import com.product.productmanager.http.config.HttpConfig;
+import com.product.productmanager.http.config.URLConfig;
 import com.product.productmanager.scanner.CaptureActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import okhttp3.RequestBody;
+import okhttp3.Response;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -77,13 +87,7 @@ public class TabFragment2 extends BaseFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 arrayList.get(position).setChoosed(!arrayList.get(position).isChoosed());
                 adapter.notifyDataSetChanged();
-                int num = 0;
-                for (orderProductModel m : arrayList){
-                    if (m.isChoosed()){
-                        num += 1;
-                    }
-                }
-                tipsLabel.setText("共" + arrayList.size() +  "个产品，已选择" + num + "个");
+                refreshView();
             }
         });
         return view;
@@ -104,6 +108,47 @@ public class TabFragment2 extends BaseFragment {
              } else {
                     //扫码
                     goScan();
+//                 //生成模型
+//                 takeOrderModel model = new takeOrderModel();
+//                 model.setId(Singleton.instance.getUserModel().getId());
+//
+//                 String[] array = new String[1];
+//                 array[0] = "6379cc1109ad11e9ba9b00163e064017";
+//                 model.setIdList(array);
+//
+//                 //转换成json
+//                 Gson gson = new Gson();
+//                 String data = gson.toJson(model,takeOrderModel.class);
+//
+//
+//                 RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"),data);
+//                 OkHttpClient mOkHttpClient = new OkHttpClient.Builder()
+//                         .connectTimeout(HttpConfig.HTTP_TIME, TimeUnit.SECONDS)
+//                         .readTimeout(HttpConfig.HTTP_TIME, TimeUnit.SECONDS)
+//                         .writeTimeout(HttpConfig.HTTP_TIME, TimeUnit.SECONDS)
+//                         .addInterceptor(InterceptorUtil.tokenInterceptor())
+//                         .build();
+//                 Request request = new Request.Builder()
+//                         .url(HttpConfig.BASE_URL + URLConfig.takeOrder_url)
+//                         .addHeader("Accept", "application/json")
+//                         .addHeader("Content-Type", "text/plain")
+//                         .addHeader("authorization", Singleton.instance.getToken())
+//                         .addHeader("enterprise", Singleton.instance.getEnterprise())
+//                         .addHeader("timestamp", String.valueOf(System.currentTimeMillis()))
+//                         .addHeader("dbname",Singleton.instance.getUserModel().getProduceDb().getDbName())
+//                         .addHeader("dbip",Singleton.instance.getUserModel().getProduceDb().getDbIp())
+//                         .post(requestBody)
+//                         .build();
+//                 mOkHttpClient.newCall(request).enqueue(new Callback() {
+//                     @Override
+//                     public void onFailure(Call call, IOException e) {
+//                         Log.e("s",e.getLocalizedMessage());
+//                     }
+//                     @Override
+//                     public void onResponse(Call call, Response response){
+//                         response.body().toString();
+//                     }
+//                 });
              }
                 break;
             case R.id.confirm_btn:
@@ -118,6 +163,7 @@ public class TabFragment2 extends BaseFragment {
                     ToolClass.showMessage("请选择工单",getActivity());
                     return;
                 }
+                //生成模型
                 takeOrderModel model = new takeOrderModel();
                 model.setId(Singleton.instance.getUserModel().getId());
 
@@ -127,12 +173,13 @@ public class TabFragment2 extends BaseFragment {
                 }
                 model.setIdList(array);
 
+                //转换成json
                 Gson gson = new Gson();
                 String data = gson.toJson(model,takeOrderModel.class);
 
-
                 RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"),data);
                 ToolClass.showProgress(getActivity());
+
                 RetrofitFactory.getInstence()
                         .API()
                         .takeOrder(requestBody)
@@ -141,7 +188,17 @@ public class TabFragment2 extends BaseFragment {
                             @Override
                             protected void onSuccees(BaseEntity<Map> t) throws Exception {
                                 ToolClass.progressDismisss();
-
+                                checkAll();
+                            }
+                            @Override
+                            protected void onCodeError(BaseEntity<Map> t) throws Exception{
+                                ToolClass.progressDismisss();
+                                checkAll();
+                            }
+                            @Override
+                            protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception{
+                                ToolClass.progressDismisss();
+                                checkAll();
                             }
                         });
                 break;
@@ -150,6 +207,51 @@ public class TabFragment2 extends BaseFragment {
         }
     }
 
+    private void refreshView(){
+        int num = 0;
+        for (orderProductModel m : arrayList){
+            if (m.isChoosed()){
+                num += 1;
+            }
+        }
+        tipsLabel.setText("共" + arrayList.size() +  "个产品，已选择" + num + "个");
+    }
+
+    private void checkAll(){
+        for (orderProductModel m : arrayList){
+            checkModel(m);
+        }
+    }
+
+    private void checkModel(orderProductModel m){
+        final takeOrderModel model = new takeOrderModel();
+        model.setId(Singleton.instance.getUserModel().getId());
+        final String[] array = new String[1];
+        array[0] = m.getId();
+        model.setIdList(array);
+
+        Gson gson = new Gson();
+        String data = gson.toJson(model,takeOrderModel.class);
+
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"),data);
+        ToolClass.showProgress(getActivity());
+
+        RetrofitFactory.getInstence()
+                .API()
+                .takeOrder(requestBody)
+                .compose(this.<BaseEntity<Map>>setThread())
+                .subscribe(new BaseObserver<Map>() {
+                    @Override
+                    protected void onSuccees(BaseEntity<Map> t) throws Exception {
+                    }
+                    @Override
+                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception{
+                        arrayList.remove(model);
+                        adapter.notifyDataSetChanged();
+                        refreshView();
+                    }
+                });
+    }
     private void goScan(){
         Intent intent = new Intent(getActivity(),CaptureActivity.class);
         startActivityForResult(intent,101);

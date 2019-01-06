@@ -74,18 +74,6 @@ public class LoginActivity extends BaseActivity {
                                 finish();
                                 ToolClass.progressDismisss();
                             }
-
-                            @Override
-                            protected void onCodeError(BaseEntity<UserModel> t) throws Exception {
-                                super.onCodeError(t);
-                                ToolClass.progressDismisss();
-                            }
-
-                            @Override
-                            protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception {
-                                super.onFailure(e,isNetWorkError);
-                                ToolClass.progressDismisss();
-                            }
                         });
 
                 break;

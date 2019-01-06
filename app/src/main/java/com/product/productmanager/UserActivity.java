@@ -1,5 +1,6 @@
 package com.product.productmanager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -24,6 +25,8 @@ public class UserActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.changePwd:
+                Intent intent = new Intent(UserActivity.this,ForgotPwdActivity.class);
+                startActivity(intent);
                 break;
             case R.id.logout_btn:
                 break;

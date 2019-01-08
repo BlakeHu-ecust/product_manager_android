@@ -121,6 +121,26 @@ public class DetailActivity extends BaseActivity {
         }
         detailTextMianliao.setText(detailTextMianliao.getText().toString() + tem);
 
+        switch (model.getStatus()){
+            case 0:
+                detailClickComplete.setVisibility(View.GONE);
+                detailComplete.setVisibility(View.GONE);
+                break;
+            case 1:
+                detailClickComplete.setVisibility(View.GONE);
+                detailComplete.setVisibility(View.GONE);
+                break;
+            case 2:
+                detailClickComplete.setVisibility(View.VISIBLE);
+                detailComplete.setVisibility(View.GONE);
+                break;
+            case 3:
+                detailClickComplete.setVisibility(View.GONE);
+                detailComplete.setVisibility(View.VISIBLE);
+                break;
+                default:
+                    break;
+        }
         setListView();
     }
 

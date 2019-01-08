@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.product.productmanager.Adapter.ScanListViewAdapter;
+import com.product.productmanager.ForgotPwdActivity;
 import com.product.productmanager.HomeActivity;
 import com.product.productmanager.LoginActivity;
 import com.product.productmanager.Model.gd_model;
@@ -36,6 +37,8 @@ import com.product.productmanager.http.RetrofitFactory;
 import com.product.productmanager.http.base.BaseObserver;
 import com.product.productmanager.http.bean.BaseEntity;
 import com.product.productmanager.http.config.HttpConfig;
+import com.product.productmanager.http.config.HttpInterface;
+import com.product.productmanager.http.config.HttpUtils;
 import com.product.productmanager.http.config.URLConfig;
 import com.product.productmanager.scanner.CaptureActivity;
 
@@ -177,30 +180,41 @@ public class TabFragment2 extends BaseFragment {
                 Gson gson = new Gson();
                 String data = gson.toJson(model,takeOrderModel.class);
 
-                RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"),data);
+                HashMap<String,Object> map = new HashMap();
+                map.put("id",Singleton.instance.getUserModel().getId());
+                map.put("idList",array);
+                //RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"),data);
+
+
                 ToolClass.showProgress(getActivity());
 
-                RetrofitFactory.getInstence()
-                        .API()
-                        .takeOrder(requestBody)
-                        .compose(this.<BaseEntity<Map>>setThread())
-                        .subscribe(new BaseObserver<Map>() {
-                            @Override
-                            protected void onSuccees(BaseEntity<Map> t) throws Exception {
-                                ToolClass.progressDismisss();
-                                checkAll();
-                            }
-                            @Override
-                            protected void onCodeError(BaseEntity<Map> t) throws Exception{
-                                ToolClass.progressDismisss();
-                                checkAll();
-                            }
-                            @Override
-                            protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception{
-                                ToolClass.progressDismisss();
-                                checkAll();
-                            }
-                        });
+                HttpUtils.startPostRequest(HttpConfig.BASE_URL + URLConfig.takeOrder_url,null, new HttpInterface() {
+                    @Override
+                    public void onResponse(String s) {
+                        ToolClass.showMessage("接单成功",getActivity());
+                    }
+                });
+//                RetrofitFactory.getInstence()
+//                        .API()
+//                        .takeOrder(requestBody)
+//                        .compose(this.<BaseEntity<Map>>setThread())
+//                        .subscribe(new BaseObserver<Map>() {
+//                            @Override
+//                            protected void onSuccees(BaseEntity<Map> t) throws Exception {
+//                                ToolClass.progressDismisss();
+//                                checkAll();
+//                            }
+//                            @Override
+//                            protected void onCodeError(BaseEntity<Map> t) throws Exception{
+//                                ToolClass.progressDismisss();
+//                                checkAll();
+//                            }
+//                            @Override
+//                            protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception{
+//                                ToolClass.progressDismisss();
+//                                checkAll();
+//                            }
+//                        });
                 break;
                 default:
                     break;

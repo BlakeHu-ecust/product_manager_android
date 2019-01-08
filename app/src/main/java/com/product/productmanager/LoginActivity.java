@@ -9,7 +9,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.google.gson.Gson;
-import com.product.productmanager.Model.UserModel;
+import com.product.productmanager.Model.LogModel;
 import com.product.productmanager.Other.SharedPreferencesHelper;
 import com.product.productmanager.Other.Singleton;
 import com.product.productmanager.Other.ToolClass;
@@ -91,18 +91,23 @@ public class LoginActivity extends BaseActivity {
                         stringBuffer.append(key + "=" + map.get(key) + "&");
                     }
                 }
+                HttpUtils httpUtils = new HttpUtils();
+                httpUtils.startPostRequest(HttpConfig.BASE_URL + URLConfig.login_url, stringBuffer.toString(), new HttpInterface() {
 
-                HttpUtils.startPostRequest(HttpConfig.BASE_URL + URLConfig.login_url, stringBuffer.toString(), new HttpInterface() {
                     @Override
                     public void onResponse(String s) {
-                        ToolClass.showMessage("登录成功", LoginActivity.this);
-                        Gson gson = new Gson();
-                        UserModel userModel = gson.fromJson(s, UserModel.class);
-                        Singleton.instance.setUserModel(userModel);
-                        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                        startActivity(intent);
-                        finish();
                         ToolClass.progressDismisss();
+                        Gson gson = new Gson();
+                        LogModel logModel = gson.fromJson(s, LogModel.class);
+                        if (logModel.isSuccess()) {
+                            ToolClass.showMessage("登录成功", LoginActivity.this);
+                            Singleton.instance.setUserModel(logModel.getUserModel());
+                            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            ToolClass.showMessage(logModel.getMessage(), Singleton.instance.getContext());
+                        }
                     }
                 });
                 break;

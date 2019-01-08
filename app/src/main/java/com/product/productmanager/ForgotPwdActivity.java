@@ -1,29 +1,20 @@
 package com.product.productmanager;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
 import com.google.gson.Gson;
+import com.product.productmanager.Model.LogModel;
+import com.product.productmanager.Model.MyBaseModel;
 import com.product.productmanager.Other.Singleton;
 import com.product.productmanager.Other.ToolClass;
-import com.product.productmanager.http.RetrofitFactory;
-import com.product.productmanager.http.base.BaseObserver;
 import com.product.productmanager.http.bean.BaseEntity;
 import com.product.productmanager.http.config.HttpConfig;
 import com.product.productmanager.http.config.HttpInterface;
 import com.product.productmanager.http.config.HttpUtils;
 import com.product.productmanager.http.config.URLConfig;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -46,12 +37,22 @@ public class ForgotPwdActivity extends BaseActivity {
     }
 
     public void SendDataByPost() {
-    HttpUtils.startPostRequest(HttpConfig.BASE_URL + URLConfig.changePwd_url + "?id=" + Singleton.instance.getUserModel().getId() + "&oldPassword=" + oldPwd.getText().toString() + "&newPassword=" + comfirmPwd.getText().toString(), null, new HttpInterface() {
-        @Override
-        public void onResponse(String s) {
-            ToolClass.showMessage("修改密码成功",ForgotPwdActivity.this);
-        }
-    });
+        HttpUtils httpUtils = new HttpUtils();
+        httpUtils.startPostRequest(HttpConfig.BASE_URL + URLConfig.changePwd_url + "?id=" + Singleton.instance.getUserModel().getId() + "&oldPassword=" + oldPwd.getText().toString() + "&newPassword=" + comfirmPwd.getText().toString(), null, new HttpInterface() {
+
+            @Override
+            public void onResponse(String s) {
+                ToolClass.progressDismisss();
+                Gson gson = new Gson();
+                MyBaseModel model = gson.fromJson(s, MyBaseModel.class);
+                if (model.isSuccess()) {
+                    ToolClass.showMessage("修改密码成功", ForgotPwdActivity.this);
+                    finish();
+                } else {
+                    ToolClass.showMessage(model.getMessage(), Singleton.instance.getContext());
+                }
+            }
+        });
 //        new Thread(new Runnable() {
 //            @Override
 //            public void run() {

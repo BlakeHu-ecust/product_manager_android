@@ -187,8 +187,9 @@ public class TabFragment2 extends BaseFragment {
 
 
                 ToolClass.showProgress(getActivity());
+                HttpUtils httpUtils = new HttpUtils();
+                httpUtils.startPostRequest(HttpConfig.BASE_URL + URLConfig.takeOrder_url,null, new HttpInterface() {
 
-                HttpUtils.startPostRequest(HttpConfig.BASE_URL + URLConfig.takeOrder_url,null, new HttpInterface() {
                     @Override
                     public void onResponse(String s) {
                         ToolClass.showMessage("接单成功",getActivity());

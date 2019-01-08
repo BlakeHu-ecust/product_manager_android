@@ -3,6 +3,8 @@ package com.product.productmanager.http.config;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.product.productmanager.Model.MyBaseModel;
+import com.product.productmanager.Model.UserModel;
 import com.product.productmanager.Other.Singleton;
 import com.product.productmanager.Other.ToolClass;
 import com.product.productmanager.http.bean.BaseEntity;
@@ -16,8 +18,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
 
-public class HttpUtils<T>{
-    public void startPostRequest(final String path,final String body,final HttpInterface httpInterface){
+public class HttpUtils{
+    public void startPostRequest(final String path, final String body, final HttpInterface httpInterface){
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -47,7 +49,7 @@ public class HttpUtils<T>{
 //                        out.flush();
 //                        out.close();
 //                    }
-                    if (body.length() > 0) {
+                    if (body != null && body.length() > 0) {
                         out.write(body);
                         out.flush();
                         out.close();
@@ -67,16 +69,8 @@ public class HttpUtils<T>{
                         response.append(line);
                     }
                     String s = response.toString();
-                    Log.d("res", s);
-                    Gson gson = new Gson();
-                    BaseEntity<T> model = gson.fromJson(s,BaseEntity.class);
-                    if (model.isSuccess()){
-                        httpInterface.onResponse(model);
-                    }
-                    else {
-                        ToolClass.progressDismisss();
-                        ToolClass.showMessage(model.getMessage(),Singleton.instance.getContext());
-                    }
+                    Log.d("==================result==================", s);
+                    httpInterface.onResponse(s);
                 } catch (Exception e) {
                     e.printStackTrace();
                 } finally {

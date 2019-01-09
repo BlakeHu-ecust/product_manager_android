@@ -69,7 +69,9 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        autoLogin();
+        if (getIntent().getBooleanExtra("auto",true)){
+            autoLogin();
+        }
     }
     private void autoLogin(){
         String company = sharedPreferencesHelper.getSharedPreference(COMPANY_NO,"").toString();

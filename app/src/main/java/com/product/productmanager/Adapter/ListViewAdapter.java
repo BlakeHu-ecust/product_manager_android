@@ -57,15 +57,16 @@ public class ListViewAdapter<T> extends BaseAdapter {
         name.setText(model.getStyleName());
         status.setText(model.getStatus() == 3 ? "已完成 " : "未完成");
         imageView.setImageDrawable(ContextCompat.getDrawable(mContext,model.getStatus() == 3 ? R.drawable.icon_right:R.drawable.icon_ing));
-        if (model.getDeliveryTime() != null && model.getDeliveryTime().length() > 0) {
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            long lt = new Long(model.getDeliveryTime());
-            Date date = new Date(lt);
-            time.setText(simpleDateFormat.format(date));
-        }
-        else{
-            time.setText("");
-        }
+//        if (model.getDeliveryTime() != null && model.getDeliveryTime().length() > 0) {
+////            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+////            long lt = new Long(model.getDeliveryTime());
+////            Date date = new Date(lt);
+////            time.setText(simpleDateFormat.format(date));
+//        }
+//        else{
+//            time.setText("");
+//        }
+        time.setText(model.getDeliveryTime());
         relativeLayout.setVisibility(model.getUrgent() == 0 ? View.GONE : View.VISIBLE);
         return convertView;
     }

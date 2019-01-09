@@ -12,32 +12,27 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.product.productmanager.Adapter.CircleAdapter;
 import com.product.productmanager.Adapter.DetailListViewAdapter;
 import com.product.productmanager.Model.MyBaseModel;
-import com.product.productmanager.Model.beginGongxuModel;
 import com.product.productmanager.Model.common.complete_model;
+import com.product.productmanager.Model.common.gongxuList_model;
 import com.product.productmanager.Model.common.orderProductModel_model;
 import com.product.productmanager.Model.detail_list_model;
 import com.product.productmanager.Model.gongxuModel;
 import com.product.productmanager.Model.orderProductDtoModel;
 import com.product.productmanager.Model.orderProductModel;
-import com.product.productmanager.Model.takeOrderModel;
 import com.product.productmanager.Other.Singleton;
 import com.product.productmanager.Other.ToolClass;
 import com.product.productmanager.View.HorizontalListView;
-import com.product.productmanager.http.RetrofitFactory;
-import com.product.productmanager.http.base.BaseObserver;
-import com.product.productmanager.http.bean.BaseEntity;
-import com.product.productmanager.http.config.HttpConfig;
 import com.product.productmanager.http.config.HttpInterface;
 import com.product.productmanager.http.config.HttpUtils;
 import com.product.productmanager.http.config.URLConfig;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -94,6 +89,7 @@ public class DetailActivity extends BaseActivity {
     private ArrayList<gongxuModel> gongxuList = new ArrayList<>();
     private CircleAdapter circleAdapter;
     private int selectedNum = -1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -126,14 +122,13 @@ public class DetailActivity extends BaseActivity {
             @Override
             public void onResponse(String s) {
                 Gson gson = new Gson();
-                orderProductModel_model tem = gson.fromJson(s,orderProductModel_model.class);
-                if (tem.isSuccess()){
+                orderProductModel_model tem = gson.fromJson(s, orderProductModel_model.class);
+                if (tem.isSuccess()) {
                     model = tem.getObject();
                     getGongxuList();
                     setUI();
-                }
-                else{
-                    ToolClass.showMessage(tem.getMessage(),DetailActivity.this);
+                } else {
+                    ToolClass.showMessage(tem.getMessage(), DetailActivity.this);
                 }
             }
         });
@@ -192,44 +187,110 @@ public class DetailActivity extends BaseActivity {
                     default:
                         break;
                 }
+//                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                if (model.getStartTime() > 0) {
+                    Date date = new Date(model.getStartTime());
+                    Date dateNow = new Date();
+                    detailTextTime.setText(detailTextTime.getText().toString() + getDatePoor(dateNow, date));
+                }
                 setListView();
             }
         });
     }
 
+    private String getDatePoor(Date endDate, Date nowDate) {
+
+        long nd = 1000 * 24 * 60 * 60;
+        long nh = 1000 * 60 * 60;
+        long nm = 1000 * 60;
+        // long ns = 1000;
+        // 获得两个时间的毫秒时间差异
+        long diff = endDate.getTime() - nowDate.getTime();
+        // 计算差多少天
+        long day = diff / nd;
+        // 计算差多少小时
+        long hour = diff % nd / nh;
+        // 计算差多少分钟
+        long min = diff % nd % nh / nm;
+        // 计算差多少秒//输出结果
+        // long sec = diff % nd % nh % nm / ns;
+        return day + "天" + hour + "小时" + min + "分钟";
+    }
+
     private void getGongxuList() {
-        RetrofitFactory.getInstence()
-                .API()
-                .workOrderProcess(model.getStyleId())
-                .compose(this.<BaseEntity<ArrayList<gongxuModel>>>setThread())
-                .subscribe(new BaseObserver<ArrayList<gongxuModel>>() {
+//        RetrofitFactory.getInstence()
+//                .API()
+//                .workOrderProcess(model.getStyleId())
+//                .compose(this.<BaseEntity<ArrayList<gongxuModel>>>setThread())
+//                .subscribe(new BaseObserver<ArrayList<gongxuModel>>() {
+//                    @Override
+//                    protected void onSuccees(BaseEntity<ArrayList<gongxuModel>> t) throws Exception {
+//                        gongxuList = t.getObject();
+//                        circleAdapter = new CircleAdapter(gongxuList, DetailActivity.this);
+//                        horizonList.setAdapter(circleAdapter);
+//                        horizonList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                            @Override
+//                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                                if (gongxuList.get(position).isChoosed()){
+//                                    selectedNum = -1;
+//                                    gongxuList.get(position).setChoosed(false);
+//                                    circleAdapter.notifyDataSetChanged();
+//                                    return;
+//                                }
+//                                if (gongxuList.get(position).getStatus() == 2 || gongxuList.get(position).getStatus() == 3){
+//                                    return;
+//                                }
+//                                for (gongxuModel m : gongxuList){
+//                                    m.setChoosed(false);
+//                                }
+//                                gongxuList.get(position).setChoosed(true);
+//                                circleAdapter.notifyDataSetChanged();
+//                                selectedNum = position;
+//                            }
+//                        });
+//                    }
+//                });
+        HttpUtils httpUtils = new HttpUtils();
+        httpUtils.startGetRequest(URLConfig.workOrderProcess_url + "?styleId=" + model.getStyleId(), new HttpInterface() {
+            @Override
+            public void onResponse(String s) {
+                Gson gson = new Gson();
+                final gongxuList_model tem = gson.fromJson(s, gongxuList_model.class);
+                Handler handler = new Handler(Looper.getMainLooper());
+                handler.post(new Runnable() {
                     @Override
-                    protected void onSuccees(BaseEntity<ArrayList<gongxuModel>> t) throws Exception {
-                        gongxuList = t.getObject();
-                        circleAdapter = new CircleAdapter(gongxuList, DetailActivity.this);
-                        horizonList.setAdapter(circleAdapter);
-                        horizonList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                if (gongxuList.get(position).isChoosed()){
-                                    selectedNum = -1;
-                                    gongxuList.get(position).setChoosed(false);
+                    public void run() {
+                        if (tem.isSuccess()) {
+                            gongxuList = tem.getObject();
+                            circleAdapter = new CircleAdapter(gongxuList, DetailActivity.this);
+                            horizonList.setAdapter(circleAdapter);
+                            horizonList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                    if (gongxuList.get(position).isChoosed()) {
+                                        selectedNum = -1;
+                                        gongxuList.get(position).setChoosed(false);
+                                        circleAdapter.notifyDataSetChanged();
+                                        return;
+                                    }
+                                    if (gongxuList.get(position).getStatus() == 2 || gongxuList.get(position).getStatus() == 3) {
+                                        return;
+                                    }
+                                    for (gongxuModel m : gongxuList) {
+                                        m.setChoosed(false);
+                                    }
+                                    gongxuList.get(position).setChoosed(true);
                                     circleAdapter.notifyDataSetChanged();
-                                    return;
+                                    selectedNum = position;
                                 }
-                                if (gongxuList.get(position).getStatus() == 2 || gongxuList.get(position).getStatus() == 3){
-                                    return;
-                                }
-                                for (gongxuModel m : gongxuList){
-                                    m.setChoosed(false);
-                                }
-                                gongxuList.get(position).setChoosed(true);
-                                circleAdapter.notifyDataSetChanged();
-                                selectedNum = position;
-                            }
-                        });
+                            });
+                        } else {
+                            ToolClass.showMessage(tem.getMessage(), DetailActivity.this);
+                        }
                     }
                 });
+            }
+        });
     }
 
     private void setListView() {
@@ -296,7 +357,7 @@ public class DetailActivity extends BaseActivity {
         detailList.setLayoutParams(params);
     }
 
-    @OnClick({R.id.btn_back, R.id.lin_back, R.id.detail_clickComplete, R.id.detail_complete,R.id.clickStart})
+    @OnClick({R.id.btn_back, R.id.lin_back, R.id.detail_clickComplete, R.id.detail_complete, R.id.clickStart})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_back:
@@ -311,7 +372,7 @@ public class DetailActivity extends BaseActivity {
                 tem.setWorkOrderId(model.getWorkOrderId());
                 ToolClass.showProgress(DetailActivity.this);
                 Gson gson = new Gson();
-                String data1 = gson.toJson(tem,complete_model.class);
+                String data1 = gson.toJson(tem, complete_model.class);
                 HttpUtils httpUtils = new HttpUtils();
                 httpUtils.startPostRequest(URLConfig.endWork_url, data1, new HttpInterface() {
                     @Override
@@ -332,8 +393,8 @@ public class DetailActivity extends BaseActivity {
 
                 break;
             case R.id.clickStart:
-                if (selectedNum == -1){
-                    ToolClass.showMessage("请选择工序",DetailActivity.this);
+                if (selectedNum == -1) {
+                    ToolClass.showMessage("请选择工序", DetailActivity.this);
                     return;
                 }
                 ToolClass.showProgress(DetailActivity.this);
@@ -361,7 +422,7 @@ public class DetailActivity extends BaseActivity {
                 tem.setProcessId(gongxuList.get(selectedNum).getId());
                 //ToolClass.showProgress(DetailActivity.this);
                 gson = new Gson();
-                String data = gson.toJson(tem,complete_model.class);
+                String data = gson.toJson(tem, complete_model.class);
                 httpUtils = new HttpUtils();
                 httpUtils.startPostRequest(URLConfig.beginWork_url, data, new HttpInterface() {
                     @Override

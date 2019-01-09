@@ -2,19 +2,23 @@ package com.product.productmanager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.product.productmanager.Adapter.ListViewAdapter;
+import com.product.productmanager.Model.common.listMode_model;
 import com.product.productmanager.Model.gd_model;
 import com.product.productmanager.Model.listModel;
 import com.product.productmanager.Other.Singleton;
 import com.product.productmanager.Other.ToolClass;
-import com.product.productmanager.http.RetrofitFactory;
-import com.product.productmanager.http.base.BaseObserver;
-import com.product.productmanager.http.bean.BaseEntity;
+import com.product.productmanager.http.config.HttpInterface;
+import com.product.productmanager.http.config.HttpUtils;
+import com.product.productmanager.http.config.URLConfig;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
@@ -48,6 +52,7 @@ public class GongdanListActivity extends BaseActivity {
     private ListViewAdapter<gd_model> listViewAdapter;
     private listModel listModel = new listModel();
     private int type = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,11 +105,10 @@ public class GongdanListActivity extends BaseActivity {
         refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(RefreshLayout refreshlayout) {
-                if (currentPage < listModel.getPage().getTotalPage()){
+                if (currentPage < listModel.getPage().getTotalPage()) {
                     currentPage += 1;
                     refreshData();
-                }
-                else{
+                } else {
                     refreshLayout.finishLoadMoreWithNoMoreData();
                 }
             }
@@ -115,33 +119,60 @@ public class GongdanListActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //String id = arrayList.get(position).getId();
-                Intent intent = new Intent(GongdanListActivity.this,DetailActivity.class);
-                intent.putExtra("id",arrayList.get(position).getId());
+                Intent intent = new Intent(GongdanListActivity.this, DetailActivity.class);
+                intent.putExtra("id", arrayList.get(position).getId());
                 startActivity(intent);
             }
         });
     }
 
     private void refreshData() {
-        RetrofitFactory.getInstence()
-                .API()
-                .findWorkOrderByList(Singleton.instance.getUserModel().getId(), currentPage, DEFAULT_SIZE,type)
-                .compose(this.<BaseEntity<listModel<gd_model>>>setThread())
-                .subscribe(new BaseObserver<listModel<gd_model>>() {
+//        RetrofitFactory.getInstence()
+//                .API()
+//                .findWorkOrderByList(Singleton.instance.getUserModel().getId(), currentPage, DEFAULT_SIZE,type)
+//                .compose(this.<BaseEntity<listModel<gd_model>>>setThread())
+//                .subscribe(new BaseObserver<listModel<gd_model>>() {
+//                    @Override
+//                    protected void onSuccees(BaseEntity<listModel<gd_model>> t) throws Exception {
+//                        listModel = t.getObject();
+//                        arrayList.addAll(listModel.getContent());
+//                        listViewAdapter.notifyDataSetChanged();
+//                        refreshLayout.finishRefresh();
+//                        if (currentPage < listModel.getPage().getTotalPage()){
+//                            refreshLayout.finishLoadMore();
+//                        }
+//                        else{
+//                            refreshLayout.finishLoadMoreWithNoMoreData();
+//                        }
+//                    }
+//                });
+        HttpUtils httpUtils = new HttpUtils();
+        httpUtils.startGetRequest(URLConfig.findWorkOrderByList_url + "?userId=" + Singleton.getInstance().getUserModel().getId() + "&page=" + currentPage + "&pageSize=" + DEFAULT_SIZE + "&type=" + type, new HttpInterface() {
+            @Override
+            public void onResponse(String s) {
+                Gson gson = new Gson();
+                final listMode_model list = gson.fromJson(s, listMode_model.class);
+                Handler handler = new Handler(Looper.getMainLooper());
+                handler.post(new Runnable() {
                     @Override
-                    protected void onSuccees(BaseEntity<listModel<gd_model>> t) throws Exception {
-                        listModel = t.getObject();
-                        arrayList.addAll(listModel.getContent());
-                        listViewAdapter.notifyDataSetChanged();
-                        refreshLayout.finishRefresh();
-                        if (currentPage < listModel.getPage().getTotalPage()){
-                            refreshLayout.finishLoadMore();
-                        }
-                        else{
-                            refreshLayout.finishLoadMoreWithNoMoreData();
+                    public void run() {
+                        if (list.isSuccess()) {
+                            listModel = list.getObject();
+                            arrayList.addAll(listModel.getContent());
+                            listViewAdapter.notifyDataSetChanged();
+                            refreshLayout.finishRefresh();
+                            if (currentPage < listModel.getPage().getTotalPage()) {
+                                refreshLayout.finishLoadMore();
+                            } else {
+                                refreshLayout.finishLoadMoreWithNoMoreData();
+                            }
+                        } else {
+                            ToolClass.showMessage(list.getMessage(), GongdanListActivity.this);
                         }
                     }
                 });
+            }
+        });
     }
 
     @OnClick({R.id.btn_back, R.id.lin_back})

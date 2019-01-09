@@ -90,9 +90,10 @@ public class LoginActivity extends BaseActivity {
                     for (String key : map.keySet()) {
                         stringBuffer.append(key + "=" + map.get(key) + "&");
                     }
+                    stringBuffer.deleteCharAt(stringBuffer.length() - 1);
                 }
                 HttpUtils httpUtils = new HttpUtils();
-                httpUtils.startPostRequest(HttpConfig.BASE_URL + URLConfig.login_url, stringBuffer.toString(), new HttpInterface() {
+                httpUtils.startPostRequest(URLConfig.login_url, stringBuffer.toString(), new HttpInterface() {
 
                     @Override
                     public void onResponse(String s) {

@@ -4,6 +4,8 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -23,10 +25,12 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.product.productmanager.Adapter.ScanListViewAdapter;
+import com.product.productmanager.DetailActivity;
 import com.product.productmanager.ForgotPwdActivity;
 import com.product.productmanager.HomeActivity;
 import com.product.productmanager.LoginActivity;
 import com.product.productmanager.Model.MyBaseModel;
+import com.product.productmanager.Model.common.orderProductModel_model;
 import com.product.productmanager.Model.gd_model;
 import com.product.productmanager.Model.listModel;
 import com.product.productmanager.Model.orderProductModel;
@@ -157,7 +161,7 @@ public class TabFragment2 extends BaseFragment {
              }
                 break;
             case R.id.confirm_btn:
-                ArrayList<orderProductModel> tem = new ArrayList<>();
+                final ArrayList<orderProductModel> tem = new ArrayList<>();
                 for (orderProductModel m : arrayList){
                     if (m.isChoosed()) {
                         tem.add(m);
@@ -195,7 +199,7 @@ public class TabFragment2 extends BaseFragment {
 
                 ToolClass.showProgress(getActivity());
                 HttpUtils httpUtils = new HttpUtils();
-                httpUtils.startPostRequest(HttpConfig.BASE_URL + URLConfig.takeOrder_url,data, new HttpInterface() {
+                httpUtils.startPostRequest(URLConfig.takeOrder_url,data, new HttpInterface() {
 
                     @Override
                     public void onResponse(String s) {
@@ -207,29 +211,19 @@ public class TabFragment2 extends BaseFragment {
                         } else {
                             ToolClass.showMessage(model.getMessage(), Singleton.instance.getContext());
                         }
+                        for (orderProductModel m : tem){
+                            arrayList.remove(m);
+                        }
+                        Handler handler = new Handler(Looper.getMainLooper());
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                adapter.notifyDataSetChanged();
+                            }
+                        });
+
                     }
                 });
-//                RetrofitFactory.getInstence()
-//                        .API()
-//                        .takeOrder(requestBody)
-//                        .compose(this.<BaseEntity<Map>>setThread())
-//                        .subscribe(new BaseObserver<Map>() {
-//                            @Override
-//                            protected void onSuccees(BaseEntity<Map> t) throws Exception {
-//                                ToolClass.progressDismisss();
-//                                checkAll();
-//                            }
-//                            @Override
-//                            protected void onCodeError(BaseEntity<Map> t) throws Exception{
-//                                ToolClass.progressDismisss();
-//                                checkAll();
-//                            }
-//                            @Override
-//                            protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception{
-//                                ToolClass.progressDismisss();
-//                                checkAll();
-//                            }
-//                        });
                 break;
                 default:
                     break;
@@ -246,41 +240,6 @@ public class TabFragment2 extends BaseFragment {
         tipsLabel.setText("共" + arrayList.size() +  "个产品，已选择" + num + "个");
     }
 
-//    private void checkAll(){
-//        for (orderProductModel m : arrayList){
-//            checkModel(m);
-//        }
-//    }
-//
-//    private void checkModel(orderProductModel m){
-//        final takeOrderModel model = new takeOrderModel();
-//        model.setId(Singleton.instance.getUserModel().getId());
-//        final String[] array = new String[1];
-//        array[0] = m.getId();
-//        model.setIdList(array);
-//
-//        Gson gson = new Gson();
-//        String data = gson.toJson(model,takeOrderModel.class);
-//
-//        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"),data);
-//        ToolClass.showProgress(getActivity());
-//
-//        RetrofitFactory.getInstence()
-//                .API()
-//                .takeOrder(requestBody)
-//                .compose(this.<BaseEntity<Map>>setThread())
-//                .subscribe(new BaseObserver<Map>() {
-//                    @Override
-//                    protected void onSuccees(BaseEntity<Map> t) throws Exception {
-//                    }
-//                    @Override
-//                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception{
-//                        arrayList.remove(model);
-//                        adapter.notifyDataSetChanged();
-//                        refreshView();
-//                    }
-//                });
-//    }
     private void goScan(){
         Intent intent = new Intent(getActivity(),CaptureActivity.class);
         startActivityForResult(intent,101);
@@ -320,19 +279,48 @@ public class TabFragment2 extends BaseFragment {
                      */
                     final String s = data.getStringExtra("qrCode");
                     Log.d("QRCode",s);
+                    for (orderProductModel m : arrayList){
+                        if (m.getId().equals(s)){
+                            ToolClass.showMessage("此工单已在列表中",getActivity());
+                            return;
+                        }
+                    }
                     ToolClass.showProgress(getActivity());
-                    RetrofitFactory.getInstence()
-                            .API()
-                            .findWorkOrderScanById(Singleton.instance.getUserModel().getId(), s)
-                            .compose(this.<BaseEntity<orderProductModel>>setThread())
-                            .subscribe(new BaseObserver<orderProductModel>() {
-                                @Override
-                                protected void onSuccees(BaseEntity<orderProductModel> t) throws Exception {
-                                    ToolClass.progressDismisss();
-                                    recodes.put(s,t.getObject());
-                                    refreshUI();
-                                }
-                            });
+//                    RetrofitFactory.getInstence()
+//                            .API()
+//                            .findWorkOrderScanById(Singleton.instance.getUserModel().getId(), s)
+//                            .compose(this.<BaseEntity<orderProductModel>>setThread())
+//                            .subscribe(new BaseObserver<orderProductModel>() {
+//                                @Override
+//                                protected void onSuccees(BaseEntity<orderProductModel> t) throws Exception {
+//                                    ToolClass.progressDismisss();
+//                                    recodes.put(s,t.getObject());
+//                                    refreshUI();
+//                                }
+//                            });
+                    HttpUtils httpUtils = new HttpUtils();
+                    httpUtils.startGetRequest(URLConfig.findWorkOrderScanById_url + "?userId=" + Singleton.instance.getUserModel().getId() + "&id=" + s, new HttpInterface() {
+                        @Override
+                        public void onResponse(String s) {
+                            ToolClass.progressDismisss();
+                            Gson gson = new Gson();
+                            orderProductModel_model tem = gson.fromJson(s,orderProductModel_model.class);
+                            if (tem.isSuccess()){
+                                recodes.put(s,tem.getObject());
+                                Handler handler = new Handler(Looper.getMainLooper());
+                                handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        refreshUI();
+                                    }
+                                });
+                            }
+                            else{
+                                ToolClass.showMessage(tem.getMessage(),getActivity());
+                            }
+                        }
+                    });
+
                 }
                 break;
             default:

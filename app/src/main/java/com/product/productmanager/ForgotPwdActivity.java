@@ -38,7 +38,7 @@ public class ForgotPwdActivity extends BaseActivity {
 
     public void SendDataByPost() {
         HttpUtils httpUtils = new HttpUtils();
-        httpUtils.startPostRequest(HttpConfig.BASE_URL + URLConfig.changePwd_url + "?id=" + Singleton.instance.getUserModel().getId() + "&oldPassword=" + oldPwd.getText().toString() + "&newPassword=" + comfirmPwd.getText().toString(), null, new HttpInterface() {
+        httpUtils.startPostRequest(URLConfig.changePwd_url + "?id=" + Singleton.instance.getUserModel().getId() + "&oldPassword=" + oldPwd.getText().toString() + "&newPassword=" + comfirmPwd.getText().toString(), null, new HttpInterface() {
 
             @Override
             public void onResponse(String s) {
@@ -46,8 +46,9 @@ public class ForgotPwdActivity extends BaseActivity {
                 Gson gson = new Gson();
                 MyBaseModel model = gson.fromJson(s, MyBaseModel.class);
                 if (model.isSuccess()) {
-                    ToolClass.showMessage("修改密码成功", ForgotPwdActivity.this);
-                    finish();
+                    ToolClass.showMessage("修改密码成功,请重新登录", ForgotPwdActivity.this);
+                    Intent intent = new Intent(ForgotPwdActivity.this,MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
                 } else {
                     ToolClass.showMessage(model.getMessage(), Singleton.instance.getContext());
                 }

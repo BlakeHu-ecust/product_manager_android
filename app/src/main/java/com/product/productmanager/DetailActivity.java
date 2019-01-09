@@ -1,6 +1,8 @@
 package com.product.productmanager;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,12 +12,15 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.product.productmanager.Adapter.CircleAdapter;
 import com.product.productmanager.Adapter.DetailListViewAdapter;
 import com.product.productmanager.Model.MyBaseModel;
 import com.product.productmanager.Model.beginGongxuModel;
+import com.product.productmanager.Model.common.complete_model;
+import com.product.productmanager.Model.common.orderProductModel_model;
 import com.product.productmanager.Model.detail_list_model;
 import com.product.productmanager.Model.gongxuModel;
 import com.product.productmanager.Model.orderProductDtoModel;
@@ -104,70 +109,92 @@ public class DetailActivity extends BaseActivity {
     }
 
     private void getMainData(String id) {
-        RetrofitFactory.getInstence()
-                .API()
-                .workOrderDetail(Singleton.instance.getUserModel().getId(), id)
-                .compose(this.<BaseEntity<orderProductModel>>setThread())
-                .subscribe(new BaseObserver<orderProductModel>() {
-                    @Override
-                    protected void onSuccees(BaseEntity<orderProductModel> t) throws Exception {
-                        model = t.getObject();
-                        getGongxuList();
-                        setUI();
-                    }
-                });
+//        RetrofitFactory.getInstence()
+//                .API()
+//                .workOrderDetail(Singleton.instance.getUserModel().getId(), id)
+//                .compose(this.<BaseEntity<orderProductModel>>setThread())
+//                .subscribe(new BaseObserver<orderProductModel>() {
+//                    @Override
+//                    protected void onSuccees(BaseEntity<orderProductModel> t) throws Exception {
+//                        model = t.getObject();
+//                        getGongxuList();
+//                        setUI();
+//                    }
+//                });
+        HttpUtils httpUtils = new HttpUtils();
+        httpUtils.startGetRequest(URLConfig.workOrderDetail_url + "?userId=" + Singleton.instance.getUserModel().getId() + "&id=" + id, new HttpInterface() {
+            @Override
+            public void onResponse(String s) {
+                Gson gson = new Gson();
+                orderProductModel_model tem = gson.fromJson(s,orderProductModel_model.class);
+                if (tem.isSuccess()){
+                    model = tem.getObject();
+                    getGongxuList();
+                    setUI();
+                }
+                else{
+                    ToolClass.showMessage(tem.getMessage(),DetailActivity.this);
+                }
+            }
+        });
     }
 
     private void setUI() {
-        titleText.setText(model.getName());
-        detailTextOrderNo.setText(detailTextOrderNo.getText().toString() + model.getWorkOrderCode());
-        detailTextgx.setText(detailTextgx.getText().toString() + model.getProcessName());
-        detailTextBanxin.setText(detailTextBanxin.getText().toString() + model.getVersionType());
-        detailTextRemark.setText(detailTextRemark.getText().toString() + model.getRemark());
-        detailTextCompleteTime.setText(detailTextCompleteTime.getText().toString() + model.getEndTime());
-        detailTextGongyi.setText(detailTextGongyi.getText().toString() + model.getTechnology());
-        detailTextDeveTime.setText(detailTextDeveTime.getText().toString() + model.getDeliveryTime());
-        detailTextShiyi.setText(detailTextShiyi.getText().toString() + (model.getFittingRequire() == 0 ? "不试衣" : "试衣"));
-        String tem = "";
-        for (int i = 0; i < model.getOrderfabricList().size(); i++) {
-            orderProductModel.orderfabricListModel m = model.getOrderfabricList().get(i);
-            if (i == 0) {
-                tem += m.getValue();
-            } else {
-                tem += "，" + m.getValue();
-            }
-        }
-        detailTextMianliao.setText(detailTextMianliao.getText().toString() + tem);
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                titleText.setText(model.getName());
+                detailTextOrderNo.setText(detailTextOrderNo.getText().toString() + model.getWorkOrderCode());
+                detailTextgx.setText(detailTextgx.getText().toString() + model.getProcessName());
+                detailTextBanxin.setText(detailTextBanxin.getText().toString() + model.getVersionType());
+                detailTextRemark.setText(detailTextRemark.getText().toString() + model.getRemark());
+                detailTextCompleteTime.setText(detailTextCompleteTime.getText().toString() + model.getEndTime());
+                detailTextGongyi.setText(detailTextGongyi.getText().toString() + model.getTechnology());
+                detailTextDeveTime.setText(detailTextDeveTime.getText().toString() + model.getDeliveryTime());
+                detailTextShiyi.setText(detailTextShiyi.getText().toString() + (model.getFittingRequire() == 0 ? "不试衣" : "试衣"));
+                String tem = "";
+                for (int i = 0; i < model.getOrderfabricList().size(); i++) {
+                    orderProductModel.orderfabricListModel m = model.getOrderfabricList().get(i);
+                    if (i == 0) {
+                        tem += m.getValue();
+                    } else {
+                        tem += "，" + m.getValue();
+                    }
+                }
+                detailTextMianliao.setText(detailTextMianliao.getText().toString() + tem);
 
-        switch (model.getStatus()) {
-            case 0:
-                detailClickComplete.setVisibility(View.GONE);
-                detailComplete.setVisibility(View.GONE);
-                clickStart.setVisibility(View.VISIBLE);
-                horizonList.setVisibility(View.VISIBLE);
-                break;
-            case 1:
-                detailClickComplete.setVisibility(View.GONE);
-                detailComplete.setVisibility(View.GONE);
-                clickStart.setVisibility(View.VISIBLE);
-                horizonList.setVisibility(View.VISIBLE);
-                break;
-            case 2:
-                detailClickComplete.setVisibility(View.VISIBLE);
-                detailComplete.setVisibility(View.GONE);
-                clickStart.setVisibility(View.GONE);
-                horizonList.setVisibility(View.GONE);
-                break;
-            case 3:
-                detailClickComplete.setVisibility(View.GONE);
-                detailComplete.setVisibility(View.VISIBLE);
-                clickStart.setVisibility(View.GONE);
-                horizonList.setVisibility(View.GONE);
-                break;
-            default:
-                break;
-        }
-        setListView();
+                switch (model.getStatus()) {
+                    case 0:
+                        detailClickComplete.setVisibility(View.GONE);
+                        detailComplete.setVisibility(View.GONE);
+                        clickStart.setVisibility(View.VISIBLE);
+                        horizonList.setVisibility(View.VISIBLE);
+                        break;
+                    case 1:
+                        detailClickComplete.setVisibility(View.GONE);
+                        detailComplete.setVisibility(View.GONE);
+                        clickStart.setVisibility(View.VISIBLE);
+                        horizonList.setVisibility(View.VISIBLE);
+                        break;
+                    case 2:
+                        detailClickComplete.setVisibility(View.VISIBLE);
+                        detailComplete.setVisibility(View.GONE);
+                        clickStart.setVisibility(View.GONE);
+                        horizonList.setVisibility(View.GONE);
+                        break;
+                    case 3:
+                        detailClickComplete.setVisibility(View.GONE);
+                        detailComplete.setVisibility(View.VISIBLE);
+                        clickStart.setVisibility(View.GONE);
+                        horizonList.setVisibility(View.GONE);
+                        break;
+                    default:
+                        break;
+                }
+                setListView();
+            }
+        });
     }
 
     private void getGongxuList() {
@@ -279,9 +306,30 @@ public class DetailActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.detail_clickComplete:
-
+                complete_model tem = new complete_model();
+                tem.setId(model.getId());
+                tem.setWorkOrderId(model.getWorkOrderId());
+                ToolClass.showProgress(DetailActivity.this);
+                Gson gson = new Gson();
+                String data1 = gson.toJson(tem,complete_model.class);
+                HttpUtils httpUtils = new HttpUtils();
+                httpUtils.startPostRequest(URLConfig.endWork_url, data1, new HttpInterface() {
+                    @Override
+                    public void onResponse(String s) {
+                        ToolClass.progressDismisss();
+                        Gson gson = new Gson();
+                        MyBaseModel model = gson.fromJson(s, MyBaseModel.class);
+                        if (model.isSuccess()) {
+                            ToolClass.showMessage("已经完成工序", DetailActivity.this);
+                            finish();
+                        } else {
+                            ToolClass.showMessage(model.getMessage(), Singleton.instance.getContext());
+                        }
+                    }
+                });
                 break;
             case R.id.detail_complete:
+
                 break;
             case R.id.clickStart:
                 if (selectedNum == -1){
@@ -289,24 +337,33 @@ public class DetailActivity extends BaseActivity {
                     return;
                 }
                 ToolClass.showProgress(DetailActivity.this);
-                beginGongxuModel submit = new beginGongxuModel();
-                submit.setId(model.getId());
-                //submit.setCreateTime(model.getcre);
-                submit.setEndTime(model.getEndTime());
-                submit.setLogId(gongxuList.get(selectedNum).getLogId());
-                submit.setName(model.getName());
-                submit.setProcessId(gongxuList.get(selectedNum).getProcessId());
-                submit.setRemark(model.getRemark());
-                submit.setStartTime(model.getStartTime());
-                submit.setStyleId(model.getStyleId());
-                submit.setStatus(model.getStatus());
-                //submit.setUpdateTime(model.getu);
-                submit.setUserId(Singleton.instance.getUserModel().getId());
-                //submit.setWorkOrderId(model.getWorkOrderCode());
-                Gson gson = new Gson();
-                String data = gson.toJson(submit,beginGongxuModel.class);
-                HttpUtils httpUtils = new HttpUtils();
-                httpUtils.startPostRequest(HttpConfig.BASE_URL + URLConfig.beginWork_url, data, new HttpInterface() {
+//                beginGongxuModel submit = new beginGongxuModel();
+//                submit.setId(gongxuList.get(selectedNum).getId());
+//                submit.setCreateTime(gongxuList.get(selectedNum).getCreateTime());
+//                submit.setEndTime(gongxuList.get(selectedNum).getEndTime());
+//                submit.setLogId(gongxuList.get(selectedNum).getLogId());
+//                submit.setName(gongxuList.get(selectedNum).getName());
+//                submit.setProcessId(gongxuList.get(selectedNum).getProcessId());
+//                submit.setRemark(gongxuList.get(selectedNum).getRemark());
+//                submit.setStartTime(gongxuList.get(selectedNum).getStartTime());
+//                submit.setStyleId(gongxuList.get(selectedNum).getStyleId());
+//                submit.setStatus(gongxuList.get(selectedNum).getStatus());
+//                submit.setUpdateTime(gongxuList.get(selectedNum).getUpdateTime());
+//                submit.setUserId(Singleton.instance.getUserModel().getId());
+//                submit.setWorkOrderId(gongxuList.get(selectedNum).getWorkOrderId());
+                //gson = new Gson();
+                //String data = gson.toJson(gongxuList.get(selectedNum),gongxuModel.class);
+
+                tem = new complete_model();
+                tem.setId(model.getId());
+                tem.setWorkOrderId(model.getWorkOrderId());
+                tem.setUserId(Singleton.getInstance().getUserModel().getId());
+                tem.setProcessId(gongxuList.get(selectedNum).getId());
+                //ToolClass.showProgress(DetailActivity.this);
+                gson = new Gson();
+                String data = gson.toJson(tem,complete_model.class);
+                httpUtils = new HttpUtils();
+                httpUtils.startPostRequest(URLConfig.beginWork_url, data, new HttpInterface() {
                     @Override
                     public void onResponse(String s) {
                         ToolClass.progressDismisss();
@@ -316,6 +373,7 @@ public class DetailActivity extends BaseActivity {
                             ToolClass.showMessage("已经开始工序", DetailActivity.this);
                             finish();
                         } else {
+                            ToolClass.progressDismisss();
                             ToolClass.showMessage(model.getMessage(), Singleton.instance.getContext());
                         }
                     }

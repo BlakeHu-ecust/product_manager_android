@@ -2,6 +2,8 @@ package com.product.productmanager.Tab;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,10 +13,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.product.productmanager.DetailActivity;
 import com.product.productmanager.GongdanListActivity;
+import com.product.productmanager.Model.current_model;
 import com.product.productmanager.Model.home_current_model;
 import com.product.productmanager.Model.home_model;
+import com.product.productmanager.Model.orderProductModel;
 import com.product.productmanager.Other.Singleton;
 import com.product.productmanager.Other.ToolClass;
 import com.product.productmanager.R;
@@ -22,6 +27,10 @@ import com.product.productmanager.UserActivity;
 import com.product.productmanager.http.RetrofitFactory;
 import com.product.productmanager.http.base.BaseObserver;
 import com.product.productmanager.http.bean.BaseEntity;
+import com.product.productmanager.http.config.HttpConfig;
+import com.product.productmanager.http.config.HttpInterface;
+import com.product.productmanager.http.config.HttpUtils;
+import com.product.productmanager.http.config.URLConfig;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -71,6 +80,7 @@ public class TabFragment1 extends BaseFragment {
     ImageView imgHand;
 
     private home_current_model model = new home_current_model();
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.layout_tab_1, null);
@@ -98,33 +108,48 @@ public class TabFragment1 extends BaseFragment {
                     }
                 });
 
-        RetrofitFactory.getInstence()
-                .API()
-                .findNewWork(Singleton.instance.getUserModel().getId())
-                .compose(this.<BaseEntity<home_current_model>>setThread())
-                .subscribe(new BaseObserver<home_current_model>() {
+        HttpUtils httpUtils = new HttpUtils();
+        httpUtils.startGetRequest(URLConfig.findNewWork_url + "?userId=" + Singleton.getInstance().getUserModel().getId(), new HttpInterface() {
+            @Override
+            public void onResponse(String s) {
+                ToolClass.progressDismisss();
+                Gson gson = new Gson();
+                final current_model m = gson.fromJson(s, current_model.class);
+                Handler handler = new Handler(Looper.getMainLooper());
+                handler.post(new Runnable() {
                     @Override
-                    protected void onSuccees(BaseEntity<home_current_model> t) throws Exception {
-                        model = t.getObject();
-                        if (model.getId().length() > 0) {
-                            styleText.setText(model.getStyleName());
-                            gongxuText.setText(model.getName());
-                            timeText.setText("交货时间：" + model.getCompleteTime());
-                            linIng.setVisibility(View.VISIBLE);
-                            workText.setVisibility(View.GONE);
-                            imgHand.setVisibility(View.GONE);
-                        }
-                        else {
+                    public void run() {
+                        if (m.isSuccess()) {
+                            model = m.getObject();
+                            if (model != null && model.getId().length() > 0) {
+                                styleText.setText(model.getStyleName());
+                                gongxuText.setText(model.getName());
+                                timeText.setText("交货时间：" + model.getCompleteTime());
+                                linIng.setVisibility(View.VISIBLE);
+                                workText.setVisibility(View.GONE);
+                                imgHand.setVisibility(View.GONE);
+
+                            } else {
+                                linIng.setVisibility(View.GONE);
+                                styleText.setVisibility(View.GONE);
+                                gongxuText.setVisibility(View.GONE);
+                                timeText.setVisibility(View.GONE);
+                                workText.setVisibility(View.VISIBLE);
+                                imgHand.setVisibility(View.VISIBLE);
+                            }
+                        } else {
+                            //ToolClass.showMessage(m.getMessage(), Singleton.instance.getContext());
                             linIng.setVisibility(View.GONE);
                             styleText.setVisibility(View.GONE);
                             gongxuText.setVisibility(View.GONE);
                             timeText.setVisibility(View.GONE);
-
                             workText.setVisibility(View.VISIBLE);
                             imgHand.setVisibility(View.VISIBLE);
                         }
                     }
                 });
+            }
+        });
     }
 
     @Override
@@ -138,13 +163,15 @@ public class TabFragment1 extends BaseFragment {
         Intent intent = new Intent(getActivity(), GongdanListActivity.class);
         switch (view.getId()) {
             case R.id.header:
-                intent = new Intent(getActivity(),UserActivity.class);
+                intent = new Intent(getActivity(), UserActivity.class);
                 startActivity(intent);
                 break;
             case R.id.current_lin:
-                intent = new Intent(getActivity(),DetailActivity.class);
-                intent.putExtra("id",model.getId());
-                startActivity(intent);
+                if (model != null && model.getId().length() > 0) {
+                    intent = new Intent(getActivity(), DetailActivity.class);
+                    intent.putExtra("id", model.getId());
+                    startActivity(intent);
+                }
                 break;
             case R.id.today_lin:
                 intent.putExtra("Type", 1);

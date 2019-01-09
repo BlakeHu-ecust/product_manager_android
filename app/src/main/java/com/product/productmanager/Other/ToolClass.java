@@ -29,13 +29,27 @@ public class ToolClass {
 
 }
 
-    static public void showProgress(Context context){
-        loading = new Loading_view(context,R.style.CustomDialog);
-        loading.show();
+    static public void showProgress(final Context context){
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                loading = new Loading_view(context,R.style.CustomDialog);
+                loading.show();
+            }
+        });
+
     }
 
     static public void progressDismisss(){
-        loading.dismiss();
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                loading.dismiss();
+            }
+        });
+
     }
 
     /**

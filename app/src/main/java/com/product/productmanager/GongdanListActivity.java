@@ -54,6 +54,11 @@ public class GongdanListActivity extends BaseActivity {
         setContentView(R.layout.activity_gongdan);
         ButterKnife.bind(this);
         initView();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         refreshLayout.autoRefresh();
     }
 
@@ -120,7 +125,7 @@ public class GongdanListActivity extends BaseActivity {
     private void refreshData() {
         RetrofitFactory.getInstence()
                 .API()
-                .findAllComplete(Singleton.instance.getUserModel().getId(), currentPage, DEFAULT_SIZE,type)
+                .findWorkOrderByList(Singleton.instance.getUserModel().getId(), currentPage, DEFAULT_SIZE,type)
                 .compose(this.<BaseEntity<listModel<gd_model>>>setThread())
                 .subscribe(new BaseObserver<listModel<gd_model>>() {
                     @Override

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class orderProductModel {
     private String id = "";
     private String workOrderCode = "";
+    private String workOrderId = "";
     private String orderId = "";
     private String customerName = "";
     private String name = "";
@@ -31,6 +32,14 @@ public class orderProductModel {
     private ArrayList<orderfabricListModel> orderfabricList = new ArrayList<>();
     private orderProductDtoModel orderProductDto = new orderProductDtoModel();
     private boolean choosed = false;
+
+    public String getWorkOrderId() {
+        return workOrderId;
+    }
+
+    public void setWorkOrderId(String workOrderId) {
+        this.workOrderId = workOrderId;
+    }
 
     public boolean isChoosed() {
         return choosed;

@@ -11,4 +11,5 @@ public interface URLConfig {
     String takeOrder_url = "userApp/takeOrder";
     String changePwd_url = "user/modifyPasswordByPeople";
     String workOrderProcess_url = "userApp/workOrderProcess";
+    String beginWork_url = "userApp/beginWork";
 }

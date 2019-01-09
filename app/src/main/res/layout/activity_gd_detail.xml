@@ -176,6 +176,34 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginLeft="10dp"/>
             </LinearLayout>
+            <com.product.productmanager.View.HorizontalListView
+                android:id="@+id/horizonList"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:divider="@null"
+                android:visibility="gone">
+            </com.product.productmanager.View.HorizontalListView>
+            <LinearLayout
+                android:id="@+id/clickStart"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+                <ImageView
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:src="@drawable/icon_start"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="15dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="点击开始"
+                    android:textColor="#0099cb"
+                    android:textSize="16sp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginVertical="10dp"/>
+            </LinearLayout>
             <ListView
                 android:id="@+id/detail_list"
                 android:layout_width="match_parent"

@@ -29,6 +29,8 @@ public class UserActivity extends BaseActivity {
                 startActivity(intent);
                 break;
             case R.id.logout_btn:
+                Intent intentmain=new Intent(UserActivity.this,MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intentmain);
                 break;
                 default:
                     break;

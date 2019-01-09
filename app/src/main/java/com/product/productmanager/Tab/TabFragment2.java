@@ -20,11 +20,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.product.productmanager.Adapter.ScanListViewAdapter;
 import com.product.productmanager.ForgotPwdActivity;
 import com.product.productmanager.HomeActivity;
 import com.product.productmanager.LoginActivity;
+import com.product.productmanager.Model.MyBaseModel;
 import com.product.productmanager.Model.gd_model;
 import com.product.productmanager.Model.listModel;
 import com.product.productmanager.Model.orderProductModel;
@@ -171,8 +173,10 @@ public class TabFragment2 extends BaseFragment {
                 model.setId(Singleton.instance.getUserModel().getId());
 
                 String[] array = new String[tem.size()];
+                JsonArray jsonArray = new JsonArray();
                 for (int i = 0;i < tem.size();i++){
                     array[i] = tem.get(i).getId();
+                    jsonArray.add(tem.get(i).getId());
                 }
                 model.setIdList(array);
 
@@ -185,14 +189,24 @@ public class TabFragment2 extends BaseFragment {
                 map.put("idList",array);
                 //RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"),data);
 
+//                JsonObject jsonObject = new JsonObject();
+//                jsonObject.addProperty("id",Singleton.instance.getUserModel().getId());
+//                jsonObject.add("idList",jsonArray);
 
                 ToolClass.showProgress(getActivity());
                 HttpUtils httpUtils = new HttpUtils();
-                httpUtils.startPostRequest(HttpConfig.BASE_URL + URLConfig.takeOrder_url,null, new HttpInterface() {
+                httpUtils.startPostRequest(HttpConfig.BASE_URL + URLConfig.takeOrder_url,data, new HttpInterface() {
 
                     @Override
                     public void onResponse(String s) {
-                        ToolClass.showMessage("接单成功",getActivity());
+                        ToolClass.progressDismisss();
+                        Gson gson = new Gson();
+                        MyBaseModel model = gson.fromJson(s, MyBaseModel.class);
+                        if (model.isSuccess()) {
+                            ToolClass.showMessage("接单成功", getActivity());
+                        } else {
+                            ToolClass.showMessage(model.getMessage(), Singleton.instance.getContext());
+                        }
                     }
                 });
 //                RetrofitFactory.getInstence()
@@ -232,41 +246,41 @@ public class TabFragment2 extends BaseFragment {
         tipsLabel.setText("共" + arrayList.size() +  "个产品，已选择" + num + "个");
     }
 
-    private void checkAll(){
-        for (orderProductModel m : arrayList){
-            checkModel(m);
-        }
-    }
-
-    private void checkModel(orderProductModel m){
-        final takeOrderModel model = new takeOrderModel();
-        model.setId(Singleton.instance.getUserModel().getId());
-        final String[] array = new String[1];
-        array[0] = m.getId();
-        model.setIdList(array);
-
-        Gson gson = new Gson();
-        String data = gson.toJson(model,takeOrderModel.class);
-
-        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"),data);
-        ToolClass.showProgress(getActivity());
-
-        RetrofitFactory.getInstence()
-                .API()
-                .takeOrder(requestBody)
-                .compose(this.<BaseEntity<Map>>setThread())
-                .subscribe(new BaseObserver<Map>() {
-                    @Override
-                    protected void onSuccees(BaseEntity<Map> t) throws Exception {
-                    }
-                    @Override
-                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception{
-                        arrayList.remove(model);
-                        adapter.notifyDataSetChanged();
-                        refreshView();
-                    }
-                });
-    }
+//    private void checkAll(){
+//        for (orderProductModel m : arrayList){
+//            checkModel(m);
+//        }
+//    }
+//
+//    private void checkModel(orderProductModel m){
+//        final takeOrderModel model = new takeOrderModel();
+//        model.setId(Singleton.instance.getUserModel().getId());
+//        final String[] array = new String[1];
+//        array[0] = m.getId();
+//        model.setIdList(array);
+//
+//        Gson gson = new Gson();
+//        String data = gson.toJson(model,takeOrderModel.class);
+//
+//        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"),data);
+//        ToolClass.showProgress(getActivity());
+//
+//        RetrofitFactory.getInstence()
+//                .API()
+//                .takeOrder(requestBody)
+//                .compose(this.<BaseEntity<Map>>setThread())
+//                .subscribe(new BaseObserver<Map>() {
+//                    @Override
+//                    protected void onSuccees(BaseEntity<Map> t) throws Exception {
+//                    }
+//                    @Override
+//                    protected void onFailure(Throwable e, boolean isNetWorkError) throws Exception{
+//                        arrayList.remove(model);
+//                        adapter.notifyDataSetChanged();
+//                        refreshView();
+//                    }
+//                });
+//    }
     private void goScan(){
         Intent intent = new Intent(getActivity(),CaptureActivity.class);
         startActivityForResult(intent,101);

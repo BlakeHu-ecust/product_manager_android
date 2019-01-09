@@ -4,22 +4,33 @@ import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.product.productmanager.Adapter.CircleAdapter;
 import com.product.productmanager.Adapter.DetailListViewAdapter;
+import com.product.productmanager.Model.MyBaseModel;
+import com.product.productmanager.Model.beginGongxuModel;
 import com.product.productmanager.Model.detail_list_model;
 import com.product.productmanager.Model.gongxuModel;
 import com.product.productmanager.Model.orderProductDtoModel;
 import com.product.productmanager.Model.orderProductModel;
+import com.product.productmanager.Model.takeOrderModel;
 import com.product.productmanager.Other.Singleton;
 import com.product.productmanager.Other.ToolClass;
+import com.product.productmanager.View.HorizontalListView;
 import com.product.productmanager.http.RetrofitFactory;
 import com.product.productmanager.http.base.BaseObserver;
 import com.product.productmanager.http.bean.BaseEntity;
+import com.product.productmanager.http.config.HttpConfig;
+import com.product.productmanager.http.config.HttpInterface;
+import com.product.productmanager.http.config.HttpUtils;
+import com.product.productmanager.http.config.URLConfig;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -68,10 +79,16 @@ public class DetailActivity extends BaseActivity {
     ListView detailList;
     @BindView(R.id.scrol)
     ScrollView scrol;
+    @BindView(R.id.horizonList)
+    HorizontalListView horizonList;
+    @BindView(R.id.clickStart)
+    LinearLayout clickStart;
 
     private orderProductModel model = new orderProductModel();
     private ArrayList<detail_list_model> listModels = new ArrayList<>();
     private ArrayList<gongxuModel> gongxuList = new ArrayList<>();
+    private CircleAdapter circleAdapter;
+    private int selectedNum = -1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,7 +103,7 @@ public class DetailActivity extends BaseActivity {
         }
     }
 
-    private void getMainData(String id){
+    private void getMainData(String id) {
         RetrofitFactory.getInstence()
                 .API()
                 .workOrderDetail(Singleton.instance.getUserModel().getId(), id)
@@ -100,6 +117,7 @@ public class DetailActivity extends BaseActivity {
                     }
                 });
     }
+
     private void setUI() {
         titleText.setText(model.getName());
         detailTextOrderNo.setText(detailTextOrderNo.getText().toString() + model.getWorkOrderCode());
@@ -121,30 +139,38 @@ public class DetailActivity extends BaseActivity {
         }
         detailTextMianliao.setText(detailTextMianliao.getText().toString() + tem);
 
-        switch (model.getStatus()){
+        switch (model.getStatus()) {
             case 0:
                 detailClickComplete.setVisibility(View.GONE);
                 detailComplete.setVisibility(View.GONE);
+                clickStart.setVisibility(View.VISIBLE);
+                horizonList.setVisibility(View.VISIBLE);
                 break;
             case 1:
                 detailClickComplete.setVisibility(View.GONE);
                 detailComplete.setVisibility(View.GONE);
+                clickStart.setVisibility(View.VISIBLE);
+                horizonList.setVisibility(View.VISIBLE);
                 break;
             case 2:
                 detailClickComplete.setVisibility(View.VISIBLE);
                 detailComplete.setVisibility(View.GONE);
+                clickStart.setVisibility(View.GONE);
+                horizonList.setVisibility(View.GONE);
                 break;
             case 3:
                 detailClickComplete.setVisibility(View.GONE);
                 detailComplete.setVisibility(View.VISIBLE);
+                clickStart.setVisibility(View.GONE);
+                horizonList.setVisibility(View.GONE);
                 break;
-                default:
-                    break;
+            default:
+                break;
         }
         setListView();
     }
 
-    private void getGongxuList(){
+    private void getGongxuList() {
         RetrofitFactory.getInstence()
                 .API()
                 .workOrderProcess(model.getStyleId())
@@ -153,6 +179,28 @@ public class DetailActivity extends BaseActivity {
                     @Override
                     protected void onSuccees(BaseEntity<ArrayList<gongxuModel>> t) throws Exception {
                         gongxuList = t.getObject();
+                        circleAdapter = new CircleAdapter(gongxuList, DetailActivity.this);
+                        horizonList.setAdapter(circleAdapter);
+                        horizonList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                if (gongxuList.get(position).isChoosed()){
+                                    selectedNum = -1;
+                                    gongxuList.get(position).setChoosed(false);
+                                    circleAdapter.notifyDataSetChanged();
+                                    return;
+                                }
+                                if (gongxuList.get(position).getStatus() == 2 || gongxuList.get(position).getStatus() == 3){
+                                    return;
+                                }
+                                for (gongxuModel m : gongxuList){
+                                    m.setChoosed(false);
+                                }
+                                gongxuList.get(position).setChoosed(true);
+                                circleAdapter.notifyDataSetChanged();
+                                selectedNum = position;
+                            }
+                        });
                     }
                 });
     }
@@ -221,7 +269,7 @@ public class DetailActivity extends BaseActivity {
         detailList.setLayoutParams(params);
     }
 
-    @OnClick({R.id.btn_back, R.id.lin_back, R.id.detail_clickComplete, R.id.detail_complete})
+    @OnClick({R.id.btn_back, R.id.lin_back, R.id.detail_clickComplete, R.id.detail_complete,R.id.clickStart})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_back:
@@ -231,8 +279,49 @@ public class DetailActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.detail_clickComplete:
+
                 break;
             case R.id.detail_complete:
+                break;
+            case R.id.clickStart:
+                if (selectedNum == -1){
+                    ToolClass.showMessage("请选择工序",DetailActivity.this);
+                    return;
+                }
+                ToolClass.showProgress(DetailActivity.this);
+                beginGongxuModel submit = new beginGongxuModel();
+                submit.setId(model.getId());
+                //submit.setCreateTime(model.getcre);
+                submit.setEndTime(model.getEndTime());
+                submit.setLogId(gongxuList.get(selectedNum).getLogId());
+                submit.setName(model.getName());
+                submit.setProcessId(gongxuList.get(selectedNum).getProcessId());
+                submit.setRemark(model.getRemark());
+                submit.setStartTime(model.getStartTime());
+                submit.setStyleId(model.getStyleId());
+                submit.setStatus(model.getStatus());
+                //submit.setUpdateTime(model.getu);
+                submit.setUserId(Singleton.instance.getUserModel().getId());
+                //submit.setWorkOrderId(model.getWorkOrderCode());
+                Gson gson = new Gson();
+                String data = gson.toJson(submit,beginGongxuModel.class);
+                HttpUtils httpUtils = new HttpUtils();
+                httpUtils.startPostRequest(HttpConfig.BASE_URL + URLConfig.beginWork_url, data, new HttpInterface() {
+                    @Override
+                    public void onResponse(String s) {
+                        ToolClass.progressDismisss();
+                        Gson gson = new Gson();
+                        MyBaseModel model = gson.fromJson(s, MyBaseModel.class);
+                        if (model.isSuccess()) {
+                            ToolClass.showMessage("已经开始工序", DetailActivity.this);
+                            finish();
+                        } else {
+                            ToolClass.showMessage(model.getMessage(), Singleton.instance.getContext());
+                        }
+                    }
+                });
+                break;
+            default:
                 break;
         }
     }

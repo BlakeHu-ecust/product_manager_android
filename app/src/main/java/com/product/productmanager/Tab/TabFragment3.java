@@ -155,7 +155,8 @@ public class TabFragment3 extends BaseFragment {
         arrayList.clear();
         //refreshData();
         if (refreshLayout.isRefreshing()){
-            return;
+            refreshLayout.finishRefresh();
+            refreshLayout.finishLoadMore();
         }
         refreshLayout.autoRefresh();
     }

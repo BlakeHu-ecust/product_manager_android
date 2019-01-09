@@ -12,8 +12,17 @@ public class gongxuModel {
     private String logId;
     private String startTime;
     private String endTime;
-    private String status;
+    private int status;
     private String name;
+    private boolean choosed = false;
+
+    public boolean isChoosed() {
+        return choosed;
+    }
+
+    public void setChoosed(boolean choosed) {
+        this.choosed = choosed;
+    }
 
     public String getId() {
         return id;
@@ -103,11 +112,11 @@ public class gongxuModel {
         this.endTime = endTime;
     }
 
-    public String getStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 

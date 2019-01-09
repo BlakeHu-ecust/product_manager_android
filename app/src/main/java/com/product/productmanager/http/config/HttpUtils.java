@@ -32,7 +32,7 @@ public class HttpUtils{
                     connection.setDoOutput(true);
                     connection.setDoInput(true);
                     connection.setRequestProperty("Accept", "application/json");
-                    connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=utf-8");
+                    connection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
                     connection.setRequestProperty("authorization", Singleton.instance.getToken());
                     connection.setRequestProperty("enterprise", Singleton.instance.getEnterprise());
                     connection.setRequestProperty("timestamp", String.valueOf(System.currentTimeMillis()));

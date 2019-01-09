@@ -25,7 +25,7 @@ public class orderProductModel {
     private String remark = "";
     private String versionType = "";
     private String processName = "";
-    private long startTime;
+    private String startTime;
     private String endTime = "";
     private int processNum;
     private int completeProcessNum;
@@ -217,11 +217,11 @@ public class orderProductModel {
         this.processName = processName;
     }
 
-    public long getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(long startTime) {
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
 

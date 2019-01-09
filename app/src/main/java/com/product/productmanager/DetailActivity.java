@@ -188,11 +188,11 @@ public class DetailActivity extends BaseActivity {
                         break;
                 }
 //                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                if (model.getStartTime() > 0) {
-                    Date date = new Date(model.getStartTime());
-                    Date dateNow = new Date();
-                    detailTextTime.setText(detailTextTime.getText().toString() + getDatePoor(dateNow, date));
-                }
+                //if (model.getStartTime() > 0) {
+                 //   Date date = new Date(model.getStartTime());
+                //    Date dateNow = new Date();
+                    detailTextTime.setText(detailTextTime.getText().toString() + model.getStartTime());
+                //}
                 setListView();
             }
         });

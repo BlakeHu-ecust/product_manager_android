@@ -24,6 +24,15 @@ public class UserModel {
     private String departmentId = "";
     private String token = "";
     private db produceDb = new db();
+    private String departmentName = "";
+
+    public String getDepartmentName() {
+        return departmentName;
+    }
+
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
+    }
 
     public db getProduceDb() {
         return produceDb;

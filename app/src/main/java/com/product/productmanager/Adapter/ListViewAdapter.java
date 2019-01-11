@@ -66,7 +66,13 @@ public class ListViewAdapter<T> extends BaseAdapter {
 //        else{
 //            time.setText("");
 //        }
-        time.setText(model.getDeliveryTime());
+        if (model.getStatus() == 3){
+            time.setText(model.getEndTime());
+        }
+        else {
+            time.setText(model.getDeliveryTime());
+        }
+
         relativeLayout.setVisibility(model.getUrgent() == 0 ? View.GONE : View.VISIBLE);
         return convertView;
     }

@@ -1,6 +1,5 @@
 package com.product.productmanager.Model.common;
 
-import com.product.productmanager.Model.MyBaseModel;
 import com.product.productmanager.Model.gd_model;
 import com.product.productmanager.Model.listModel;
 

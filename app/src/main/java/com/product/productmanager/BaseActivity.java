@@ -1,6 +1,7 @@
 package com.product.productmanager;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
@@ -20,6 +21,7 @@ public class BaseActivity extends FragmentActivity {
     protected static final String COMPANY_NO = "enterprise";
     protected static final String USER_NAME = "userName";
     protected static final String PASSWORD = "passWord";
+    protected static final String AUTOLOGIN = "atuologin";
     protected static final Integer DEFAULT_SIZE = 10;
 
     @Override
@@ -35,5 +37,11 @@ public class BaseActivity extends FragmentActivity {
                 return upstream.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
             }
         };
+    }
+
+    protected void refreshDataView(){
+        Intent intent = new Intent();
+        setResult(RESULT_OK, intent);
+        finish();
     }
 }

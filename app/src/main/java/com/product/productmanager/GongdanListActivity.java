@@ -59,12 +59,13 @@ public class GongdanListActivity extends BaseActivity {
         setContentView(R.layout.activity_gongdan);
         ButterKnife.bind(this);
         initView();
+        refreshLayout.autoRefresh();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        refreshLayout.autoRefresh();
+        //refreshLayout.autoRefresh();
     }
 
     private void initView() {
@@ -118,14 +119,27 @@ public class GongdanListActivity extends BaseActivity {
         gongdanListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //String id = arrayList.get(position).getId();
-                Intent intent = new Intent(GongdanListActivity.this, DetailActivity.class);
-                intent.putExtra("id", arrayList.get(position).getId());
-                startActivity(intent);
+                if (position < arrayList.size()){
+                    Intent intent = new Intent(GongdanListActivity.this, DetailActivity.class);
+                    intent.putExtra("id", arrayList.get(position).getId());
+                    startActivityForResult(intent,1000);
+                }
             }
         });
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case 1000:
+                if (resultCode == RESULT_OK) {
+                    refreshLayout.autoRefresh();
+                }
+            default:
+                break;
+        }
+    }
     private void refreshData() {
 //        RetrofitFactory.getInstence()
 //                .API()

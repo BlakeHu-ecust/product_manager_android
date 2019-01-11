@@ -25,7 +25,7 @@ public class orderProductModel {
     private String remark = "";
     private String versionType = "";
     private String processName = "";
-    private String startTime;
+    private String startTime = "";
     private String endTime = "";
     private int processNum;
     private int completeProcessNum;

@@ -1,13 +1,13 @@
 package com.product.productmanager.http.config;
 
+import android.content.Intent;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.product.productmanager.Model.MyBaseModel;
-import com.product.productmanager.Model.UserModel;
+import com.product.productmanager.MainActivity;
+import com.product.productmanager.Model.common.MyBaseModel;
 import com.product.productmanager.Other.Singleton;
 import com.product.productmanager.Other.ToolClass;
-import com.product.productmanager.http.bean.BaseEntity;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,9 +16,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.HashMap;
 
 public class HttpUtils{
+    final String tips = "您的账号已在另一台设备登录，如非本人操作密码可能已泄露，请及时修改密码！";
     public void startPostRequest(final String path, final String body, final HttpInterface httpInterface){
         new Thread(new Runnable() {
             @Override
@@ -74,7 +74,15 @@ public class HttpUtils{
                         response.append(line);
                     }
                     String s = response.toString();
-                    //Log.d("==================result==================", s);
+                    Log.d("HttpResult======", s);
+                    Gson gson = new Gson();
+                    MyBaseModel myBaseModel = gson.fromJson(s,MyBaseModel.class);
+                    if (myBaseModel.getMessage() != null && myBaseModel.getMessage().equals("token no match")){
+                        ToolClass.showMessage(tips,Singleton.getInstance().getContext());
+                        Intent intent = new Intent(Singleton.getInstance().getContext(), MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        Singleton.getInstance().getContext().startActivity(intent);
+                        return;
+                    }
                     httpInterface.onResponse(s);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -142,7 +150,15 @@ public class HttpUtils{
                         response.append(line);
                     }
                     String s = response.toString();
-                    Log.d("result", s);
+                    Log.d("HttpResult======", s);
+                    Gson gson = new Gson();
+                    MyBaseModel myBaseModel = gson.fromJson(s,MyBaseModel.class);
+                    if (myBaseModel.getMessage() != null && myBaseModel.getMessage().equals("token no match")){
+                        ToolClass.showMessage(tips,Singleton.getInstance().getContext());
+                        Intent intent = new Intent(Singleton.getInstance().getContext(), MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        Singleton.getInstance().getContext().startActivity(intent);
+                        return;
+                    }
                     httpInterface.onResponse(s);
                 } catch (Exception e) {
                     e.printStackTrace();

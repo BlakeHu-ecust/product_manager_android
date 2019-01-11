@@ -101,13 +101,13 @@ public class LoginActivity extends BaseActivity {
                         Gson gson = new Gson();
                         LogModel logModel = gson.fromJson(s, LogModel.class);
                         if (logModel.isSuccess()) {
-                            ToolClass.showMessage("登录成功", LoginActivity.this);
+                            //ToolClass.showMessage("登录成功", LoginActivity.this);
                             Singleton.instance.setUserModel(logModel.getUserModel());
                             Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                             startActivity(intent);
                             finish();
                         } else {
-                            ToolClass.showMessage(logModel.getMessage(), Singleton.instance.getContext());
+                            ToolClass.showMessage(logModel.getMessage(), LoginActivity.this);
                         }
                     }
                 });

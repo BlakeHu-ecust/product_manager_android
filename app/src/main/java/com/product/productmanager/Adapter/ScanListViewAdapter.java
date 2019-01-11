@@ -54,9 +54,14 @@ public class ScanListViewAdapter extends BaseAdapter {
 
         orderProductModel model = mData.get(position);
         product.setText("产品：" + model.getName());
-        gongxu.setText("工序：" + model.getProcessName());
+        //gongxu.setText("工序：" + model.getProcessName());
         name.setText("单号：" + model.getWorkOrderCode());
-        time.setText("交货日期：" + model.getDeliveryTime());
+        if (model.getDeliveryTime() != null) {
+            time.setText("交货日期：" + model.getDeliveryTime());
+        }
+        else{
+            time.setText("交货日期：");
+        }
         urgent.setVisibility(model.getUrgent() == 0 ? View.GONE : View.VISIBLE);
         button.setImageDrawable(ContextCompat.getDrawable(mContext,model.isChoosed() ? R.drawable.icon_choose:R.drawable.icon_unchoose));
         return convertView;

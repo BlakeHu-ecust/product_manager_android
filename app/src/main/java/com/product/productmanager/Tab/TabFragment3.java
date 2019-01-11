@@ -36,6 +36,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
+import static android.app.Activity.RESULT_OK;
+
 public class TabFragment3 extends BaseFragment {
     @BindView(R.id.tipsBar_1)
     View tipsBar1;
@@ -66,6 +68,7 @@ public class TabFragment3 extends BaseFragment {
         View view = inflater.inflate(R.layout.layout_tab_3, null);
         unbinder = ButterKnife.bind(this, view);
         initView();
+        refreshLayout.autoRefresh();
         return view;
     }
 
@@ -100,9 +103,11 @@ public class TabFragment3 extends BaseFragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(),DetailActivity.class);
-                intent.putExtra("id",arrayList.get(position).getId());
-                startActivity(intent);
+                if (position < arrayList.size()){
+                    Intent intent = new Intent(getActivity(),DetailActivity.class);
+                    intent.putExtra("id",arrayList.get(position).getId());
+                    startActivityForResult(intent,1000);
+                }
             }
         });
         refrshBar(selectedNum);
@@ -116,6 +121,9 @@ public class TabFragment3 extends BaseFragment {
                 .subscribe(new BaseObserver<listModel<gd_model>>() {
                     @Override
                     protected void onSuccees(BaseEntity<listModel<gd_model>> t) throws Exception {
+                        if (currentPage == 1){
+                            arrayList.clear();
+                        }
                         listModel = t.getObject();
                         arrayList.addAll(listModel.getContent());
                         listViewAdapter.notifyDataSetChanged();
@@ -132,6 +140,9 @@ public class TabFragment3 extends BaseFragment {
     }
 
     private void refrshBar(int num) {
+        if (refreshLayout.isRefreshing()){
+            return;
+        }
         selectedNum = num;
         switch (selectedNum) {
             case 1:
@@ -165,6 +176,19 @@ public class TabFragment3 extends BaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case 1000:
+                if (resultCode == RESULT_OK) {
+                    refreshLayout.autoRefresh();
+                }
+            default:
+                break;
+        }
     }
 
     @OnClick({R.id.lin1, R.id.lin2, R.id.lin3})

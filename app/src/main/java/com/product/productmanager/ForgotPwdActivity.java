@@ -6,12 +6,9 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.google.gson.Gson;
-import com.product.productmanager.Model.LogModel;
-import com.product.productmanager.Model.MyBaseModel;
+import com.product.productmanager.Model.common.MyBaseModel;
 import com.product.productmanager.Other.Singleton;
 import com.product.productmanager.Other.ToolClass;
-import com.product.productmanager.http.bean.BaseEntity;
-import com.product.productmanager.http.config.HttpConfig;
 import com.product.productmanager.http.config.HttpInterface;
 import com.product.productmanager.http.config.HttpUtils;
 import com.product.productmanager.http.config.URLConfig;

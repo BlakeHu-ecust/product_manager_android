@@ -12,9 +12,9 @@ import com.product.productmanager.Tab.TabFragment3;
 
 public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
     private final int PAGER_COUNT = 3;
-    private TabFragment1 myFragment1;
-    private TabFragment2 myFragment2;
-    private TabFragment3 myFragment3;
+    public TabFragment1 myFragment1;
+    public TabFragment2 myFragment2;
+    public TabFragment3 myFragment3;
 
 
     public MyFragmentPagerAdapter(FragmentManager fm) {

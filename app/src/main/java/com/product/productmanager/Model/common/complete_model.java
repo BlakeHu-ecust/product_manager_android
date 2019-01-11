@@ -1,10 +1,10 @@
 package com.product.productmanager.Model.common;
 
 public class complete_model {
-    private String id = "";
-    private String workOrderId = "";
-    private String processId = "";
-    private String userId = "";
+    private String id;
+    private String workOrderId;
+    private String processId;
+    private String userId;
 
     public String getProcessId() {
         return processId;

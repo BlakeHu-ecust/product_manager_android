@@ -2,10 +2,10 @@ package com.product.productmanager.Model;
 
 public class home_model {
     private String userId = "";
-    private String unComplete = "";
-    private String complete = "";
-    private String monthComplete = "";
-    private String todayTotal = "";
+    private int unComplete = 0;
+    private int complete = 0;
+    private int monthComplete = 0;
+    private int todayTotal = 0;
 
     public String getUserId() {
         return userId;
@@ -15,35 +15,35 @@ public class home_model {
         this.userId = userId;
     }
 
-    public String getUnComplete() {
+    public int getUnComplete() {
         return unComplete;
     }
 
-    public void setUnComplete(String unComplete) {
+    public void setUnComplete(int unComplete) {
         this.unComplete = unComplete;
     }
 
-    public String getComplete() {
+    public int getComplete() {
         return complete;
     }
 
-    public void setComplete(String complete) {
+    public void setComplete(int complete) {
         this.complete = complete;
     }
 
-    public String getMonthComplete() {
+    public int getMonthComplete() {
         return monthComplete;
     }
 
-    public void setMonthComplete(String monthComplete) {
+    public void setMonthComplete(int monthComplete) {
         this.monthComplete = monthComplete;
     }
 
-    public String getTodayTotal() {
+    public int getTodayTotal() {
         return todayTotal;
     }
 
-    public void setTodayTotal(String todayTotal) {
+    public void setTodayTotal(int todayTotal) {
         this.todayTotal = todayTotal;
     }
 }

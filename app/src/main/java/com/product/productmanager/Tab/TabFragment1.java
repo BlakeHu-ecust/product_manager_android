@@ -16,6 +16,8 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.product.productmanager.DetailActivity;
 import com.product.productmanager.GongdanListActivity;
+import com.product.productmanager.HomeActivity;
+import com.product.productmanager.Model.common.home_Mymodel;
 import com.product.productmanager.Model.current_model;
 import com.product.productmanager.Model.home_current_model;
 import com.product.productmanager.Model.home_model;
@@ -31,6 +33,7 @@ import com.product.productmanager.http.config.HttpConfig;
 import com.product.productmanager.http.config.HttpInterface;
 import com.product.productmanager.http.config.HttpUtils;
 import com.product.productmanager.http.config.URLConfig;
+import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -96,23 +99,39 @@ public class TabFragment1 extends BaseFragment {
     private void initView() {
         Log.d("CurrentToken", Singleton.instance.getToken());
         nameLabel.setText(Singleton.instance.getUserModel().getRealName());
-        companyLabel.setText(Singleton.instance.getUserModel().getAddress());
+        companyLabel.setText(Singleton.instance.getUserModel().getDepartmentName());
+        String s = "http://" + Singleton.getInstance().getUserModel().getProduceDb().getDbIp() + "/image" + Singleton.getInstance().getUserModel().getImage();
+        Picasso.get().load(s).into(header);
 
-        RetrofitFactory.getInstence()
-                .API()
-                .findCount(Singleton.instance.getUserModel().getId())
-                .compose(this.<BaseEntity<home_model>>setThread())
-                .subscribe(new BaseObserver<home_model>() {
+        HttpUtils httpUtils = new HttpUtils();
+        httpUtils.startGetRequest(URLConfig.findCount_url + "?userId=" + Singleton.getInstance().getUserModel().getId(), new HttpInterface() {
+            @Override
+            public void onResponse(String s) {
+                Gson gson = new Gson();
+                final home_Mymodel model = gson.fromJson(s,home_Mymodel.class);
+                //ToolClass.showMessage("" + model.getObject().getUnComplete(),getActivity());
+                Handler handler = new Handler(Looper.getMainLooper());
+                handler.post(new Runnable() {
                     @Override
-                    protected void onSuccees(BaseEntity<home_model> t) throws Exception {
-                        completeText.setText(t.getObject().getComplete());
-                        notCompleteText.setText(t.getObject().getUnComplete());
-                        currentText.setText(t.getObject().getTodayTotal());
-                        monthText.setText(t.getObject().getMonthComplete());
+                    public void run() {
+                        if (model.isSuccess()){
+                            if (model.getObject() != null) {
+                                completeText.setText("" + model.getObject().getComplete());
+                                notCompleteText.setText("" + model.getObject().getUnComplete());
+                                currentText.setText("" + model.getObject().getTodayTotal());
+                                monthText.setText("" + model.getObject().getMonthComplete());
+                            }
+                        }
+                        else{
+                            ToolClass.showMessage(model.getMessage(),getActivity());
+                        }
                     }
                 });
 
-        HttpUtils httpUtils = new HttpUtils();
+            }
+        });
+
+
         httpUtils.startGetRequest(URLConfig.findNewWork_url + "?userId=" + Singleton.getInstance().getUserModel().getId(), new HttpInterface() {
             @Override
             public void onResponse(String s) {
@@ -128,16 +147,21 @@ public class TabFragment1 extends BaseFragment {
                             if (model != null && model.getId().length() > 0) {
                                 styleText.setText(model.getStyleName());
                                 gongxuText.setText(model.getName());
-                                timeText.setText("交货时间：" + model.getCompleteTime());
+                                timeText.setText("交货时间：" + model.getDeliveryTime());
                                 linIng.setVisibility(View.VISIBLE);
                                 workText.setVisibility(View.GONE);
                                 imgHand.setVisibility(View.GONE);
                                 timeIngText.setVisibility(View.VISIBLE);
                                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                                long lt = new Long(model.getStartTime());
-                                Date date = new Date(lt);
-                                Date dateNow = new Date();
-                                timeIngText.setText(getDatePoor(dateNow,date));
+                                Date date;
+                                try {
+                                    date = format.parse(model.getStartTime());
+                                    Date dateNow = new Date();
+                                    timeIngText.setText(getDatePoor(dateNow,date));
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+
                             } else {
                                 linIng.setVisibility(View.GONE);
                                 styleText.setVisibility(View.GONE);
@@ -147,6 +171,7 @@ public class TabFragment1 extends BaseFragment {
                                 imgHand.setVisibility(View.VISIBLE);
                             }
                         } else {
+                            model = null;
                             //ToolClass.showMessage(m.getMessage(), Singleton.instance.getContext());
                             linIng.setVisibility(View.GONE);
                             styleText.setVisibility(View.GONE);
@@ -166,7 +191,7 @@ public class TabFragment1 extends BaseFragment {
         long nd = 1000 * 24 * 60 * 60;
         long nh = 1000 * 60 * 60;
         long nm = 1000 * 60;
-        // long ns = 1000;
+        long ns = 1000;
         // 获得两个时间的毫秒时间差异
         long diff = endDate.getTime() - nowDate.getTime();
         // 计算差多少天
@@ -176,8 +201,21 @@ public class TabFragment1 extends BaseFragment {
         // 计算差多少分钟
         long min = diff % nd % nh / nm;
         // 计算差多少秒//输出结果
-        // long sec = diff % nd % nh % nm / ns;
-        return day + "天" + hour + "小时" + min + "分钟";
+        long sec = diff % nd % nh % nm / ns;
+        StringBuffer stringBuffer = new StringBuffer();
+        if (sec > 0){
+            stringBuffer.insert(0,sec + "秒");
+        }
+        if (min > 0){
+            stringBuffer.insert(0,sec + "分");
+        }
+        if (hour > 0){
+            stringBuffer.insert(0,sec + "时");
+        }
+        if (day > 0){
+            stringBuffer.insert(0,sec + "天");
+        }
+        return stringBuffer.toString();
     }
 
     @Override
@@ -197,8 +235,12 @@ public class TabFragment1 extends BaseFragment {
             case R.id.current_lin:
                 if (model != null && model.getId().length() > 0) {
                     intent = new Intent(getActivity(), DetailActivity.class);
-                    intent.putExtra("id", model.getId());
+                    intent.putExtra("id", model.getWorkOrderProcessId());
                     startActivity(intent);
+                }
+                else{
+                    HomeActivity homeActivity = (HomeActivity)getActivity();
+                    homeActivity.changeToFrgmeng2();
                 }
                 break;
             case R.id.today_lin:

@@ -17,7 +17,6 @@ import android.widget.Toast;
 
 import com.product.productmanager.Adapter.MyFragmentPagerAdapter;
 import com.product.productmanager.View.MyViewPager;
-import com.product.productmanager.scanner.CaptureActivity;
 
 import butterknife.ButterKnife;
 
@@ -42,6 +41,7 @@ public class HomeActivity extends AppCompatActivity implements RadioGroup.OnChec
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tab);
         ButterKnife.bind(this);
+        //CrashReport.initCrashReport(getApplicationContext(), "e0b90440f3", true);
         initView();
     }
     private void initView() {
@@ -99,6 +99,14 @@ public class HomeActivity extends AppCompatActivity implements RadioGroup.OnChec
                 break;
                 default:
                     break;
+        }
+    }
+
+    public void changeToFrgmeng2(){
+        mVp.setCurrentItem(PAGE_TWO,true);
+        MyFragmentPagerAdapter adapter = (MyFragmentPagerAdapter)mVp.getAdapter();
+        if (adapter != null){
+            adapter.myFragment2.openCamera();
         }
     }
 }

@@ -7,6 +7,24 @@ public class home_current_model {
     private String name = "";
     private String styleName = "";
     private String styleId = "";
+    private String deliveryTime = "";
+    private String workOrderProcessId = "";
+
+    public String getWorkOrderProcessId() {
+        return workOrderProcessId;
+    }
+
+    public void setWorkOrderProcessId(String workOrderProcessId) {
+        this.workOrderProcessId = workOrderProcessId;
+    }
+
+    public String getDeliveryTime() {
+        return deliveryTime;
+    }
+
+    public void setDeliveryTime(String deliveryTime) {
+        this.deliveryTime = deliveryTime;
+    }
 
     public String getId() {
         return id;

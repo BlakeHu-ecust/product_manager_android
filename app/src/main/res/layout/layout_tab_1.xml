@@ -50,7 +50,8 @@
                         android:layout_gravity="center_vertical"
                         android:textColor="#555555"
                         android:paddingBottom="5dp"
-                        android:textSize="13sp" />
+                        android:textSize="13sp"
+                        />
                 </LinearLayout>
             </LinearLayout>
             <ImageView
@@ -59,14 +60,16 @@
                 android:src="@drawable/icon_notice"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="10dp"
-                android:layout_marginRight="5dp"/>
+                android:layout_marginRight="5dp"
+                android:visibility="gone"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="1"
                 android:textSize="18sp"
                 android:layout_gravity="center_vertical"
-                android:layout_marginRight="10dp"/>
+                android:layout_marginRight="10dp"
+                android:visibility="gone"/>
         </LinearLayout>
         <ImageView
             android:layout_width="match_parent"
@@ -109,12 +112,12 @@
                     </LinearLayout>
                     <LinearLayout
                         android:id="@+id/lin_ing"
-                        android:layout_width="wrap_content"
-                        android:layout_height="30dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="10dp"
                         android:orientation="horizontal"
-                        android:visibility="gone">
+                        >
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -124,14 +127,14 @@
                             android:textSize="13sp" />
                         <TextView
                             android:id="@+id/time_ingText"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_horizontal"
                             android:text="00:00"
                             android:layout_gravity="center_vertical"
-                            android:textSize="22sp"
+                            android:textSize="16sp"
                             android:textColor="#297a9e"
-                            android:layout_marginLeft="15dp"/>
+                            android:layout_marginLeft="5dp"/>
 
                     </LinearLayout>
                     <TextView
@@ -208,7 +211,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center_horizontal"
-                            android:text=""
+                            android:text="0"
                             android:textSize="25sp"
                             android:layout_marginTop="5dp"/>
                     </LinearLayout>
@@ -236,7 +239,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center_horizontal"
-                        android:text=""
+                        android:text="0"
                         android:textSize="25sp"
                         android:layout_marginTop="5dp"/>
                 </LinearLayout>
@@ -271,7 +274,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center_horizontal"
-                        android:text=""
+                        android:text="0"
                         android:textSize="25sp"
                         android:layout_marginTop="5dp"/>
                 </LinearLayout>
@@ -302,7 +305,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center_horizontal"
-                        android:text=""
+                        android:text="0"
                         android:textSize="25sp"
                         android:layout_marginTop="5dp"/>
                 </LinearLayout>

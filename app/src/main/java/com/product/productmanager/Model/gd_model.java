@@ -13,7 +13,17 @@ public class gd_model{
     private String completeProcessNum = "";
     private int urgent = 0;
     private String completeStatus = "";
+    private String endTime = "";
     private int status;
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
     public String getId() {
         return id;
     }

@@ -16,7 +16,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.product.productmanager.Adapter.CircleAdapter;
 import com.product.productmanager.Adapter.DetailListViewAdapter;
-import com.product.productmanager.Model.MyBaseModel;
+import com.product.productmanager.Model.common.MyBaseModel;
 import com.product.productmanager.Model.common.complete_model;
 import com.product.productmanager.Model.common.gongxuList_model;
 import com.product.productmanager.Model.common.orderProductModel_model;
@@ -31,6 +31,8 @@ import com.product.productmanager.http.config.HttpInterface;
 import com.product.productmanager.http.config.HttpUtils;
 import com.product.productmanager.http.config.URLConfig;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -83,6 +85,8 @@ public class DetailActivity extends BaseActivity {
     HorizontalListView horizonList;
     @BindView(R.id.clickStart)
     LinearLayout clickStart;
+    @BindView(R.id.back_btn)
+    Button backBtn;
 
     private orderProductModel model = new orderProductModel();
     private ArrayList<detail_list_model> listModels = new ArrayList<>();
@@ -141,23 +145,35 @@ public class DetailActivity extends BaseActivity {
             public void run() {
                 titleText.setText(model.getName());
                 detailTextOrderNo.setText(detailTextOrderNo.getText().toString() + model.getWorkOrderCode());
-                detailTextgx.setText(detailTextgx.getText().toString() + model.getProcessName());
+                if (model.getProcessName() != null) {
+                    detailTextgx.setText(detailTextgx.getText().toString() + model.getProcessName());
+                } else {
+                    detailTextgx.setVisibility(View.GONE);
+                }
                 detailTextBanxin.setText(detailTextBanxin.getText().toString() + model.getVersionType());
                 detailTextRemark.setText(detailTextRemark.getText().toString() + model.getRemark());
-                detailTextCompleteTime.setText(detailTextCompleteTime.getText().toString() + model.getEndTime());
+                if (model.getEndTime() != null) {
+                    detailTextCompleteTime.setText(detailTextCompleteTime.getText().toString() + model.getEndTime());
+                } else {
+                    detailTextCompleteTime.setVisibility(View.GONE);
+                }
                 detailTextGongyi.setText(detailTextGongyi.getText().toString() + model.getTechnology());
-                detailTextDeveTime.setText(detailTextDeveTime.getText().toString() + model.getDeliveryTime());
-                detailTextShiyi.setText(detailTextShiyi.getText().toString() + (model.getFittingRequire() == 0 ? "不试衣" : "试衣"));
-                String tem = "";
+                if (model.getDeliveryTime() != null) {
+                    detailTextDeveTime.setText(detailTextDeveTime.getText().toString() + model.getDeliveryTime());
+                }
+                detailTextDeveTime.setVisibility(View.VISIBLE);
+                detailTextShiyi.setText(detailTextShiyi.getText().toString() + (model.getFittingRequire() == 0 ? "不需试衣" : "需要试衣"));
+                StringBuffer tem = new StringBuffer();
                 for (int i = 0; i < model.getOrderfabricList().size(); i++) {
                     orderProductModel.orderfabricListModel m = model.getOrderfabricList().get(i);
-                    if (i == 0) {
-                        tem += m.getValue();
-                    } else {
-                        tem += "，" + m.getValue();
+                    if (m.getValue().length() > 0) {
+                        tem.append("，" + m.getValue());
                     }
                 }
-                detailTextMianliao.setText(detailTextMianliao.getText().toString() + tem);
+                if (tem.toString().length() > 0) {
+                    tem.deleteCharAt(0);
+                }
+                detailTextMianliao.setText(detailTextMianliao.getText().toString() + tem.toString());
 
                 switch (model.getStatus()) {
                     case 0:
@@ -165,34 +181,52 @@ public class DetailActivity extends BaseActivity {
                         detailComplete.setVisibility(View.GONE);
                         clickStart.setVisibility(View.VISIBLE);
                         horizonList.setVisibility(View.VISIBLE);
+                        backBtn.setVisibility(View.VISIBLE);
+                        detailTextCompleteTime.setVisibility(View.GONE);
+                        detailTextTime.setVisibility(View.GONE);
                         break;
                     case 1:
                         detailClickComplete.setVisibility(View.GONE);
                         detailComplete.setVisibility(View.GONE);
                         clickStart.setVisibility(View.VISIBLE);
                         horizonList.setVisibility(View.VISIBLE);
+                        backBtn.setVisibility(View.VISIBLE);
+                        detailTextCompleteTime.setVisibility(View.GONE);
+                        detailTextTime.setVisibility(View.GONE);
                         break;
                     case 2:
                         detailClickComplete.setVisibility(View.VISIBLE);
                         detailComplete.setVisibility(View.GONE);
                         clickStart.setVisibility(View.GONE);
                         horizonList.setVisibility(View.GONE);
+                        detailTextTime.setVisibility(View.GONE);
+                        backBtn.setVisibility(View.GONE);
+                        detailTextCompleteTime.setVisibility(View.GONE);
+                        detailTextTime.setVisibility(View.GONE);
                         break;
                     case 3:
                         detailClickComplete.setVisibility(View.GONE);
                         detailComplete.setVisibility(View.VISIBLE);
                         clickStart.setVisibility(View.GONE);
                         horizonList.setVisibility(View.GONE);
+                        backBtn.setVisibility(View.GONE);
+                        detailTextCompleteTime.setVisibility(View.VISIBLE);
+                        detailTextTime.setVisibility(View.VISIBLE);
                         break;
                     default:
                         break;
                 }
-//                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                //if (model.getStartTime() > 0) {
-                 //   Date date = new Date(model.getStartTime());
-                //    Date dateNow = new Date();
-                    detailTextTime.setText(detailTextTime.getText().toString() + model.getStartTime());
-                //}
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                if (model.getStartTime() != null && model.getStartTime().length() > 0 && model.getEndTime() != null && model.getEndTime().length() > 0) {
+                    try {
+                        Date date = format.parse(model.getStartTime());
+                        Date dateNow = format.parse(model.getEndTime());
+                        detailTextTime.setText(detailTextTime.getText() + getDatePoor(dateNow, date));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+                }
                 setListView();
             }
         });
@@ -203,7 +237,7 @@ public class DetailActivity extends BaseActivity {
         long nd = 1000 * 24 * 60 * 60;
         long nh = 1000 * 60 * 60;
         long nm = 1000 * 60;
-        // long ns = 1000;
+        long ns = 1000;
         // 获得两个时间的毫秒时间差异
         long diff = endDate.getTime() - nowDate.getTime();
         // 计算差多少天
@@ -213,8 +247,22 @@ public class DetailActivity extends BaseActivity {
         // 计算差多少分钟
         long min = diff % nd % nh / nm;
         // 计算差多少秒//输出结果
-        // long sec = diff % nd % nh % nm / ns;
-        return day + "天" + hour + "小时" + min + "分钟";
+        long sec = diff % nd % nh % nm / ns;
+
+        StringBuffer stringBuffer = new StringBuffer();
+        if (sec > 0) {
+            stringBuffer.insert(0, sec + "秒");
+        }
+        if (min > 0) {
+            stringBuffer.insert(0, sec + "分");
+        }
+        if (hour > 0) {
+            stringBuffer.insert(0, sec + "时");
+        }
+        if (day > 0) {
+            stringBuffer.insert(0, sec + "天");
+        }
+        return stringBuffer.toString();
     }
 
     private void getGongxuList() {
@@ -251,7 +299,7 @@ public class DetailActivity extends BaseActivity {
 //                    }
 //                });
         HttpUtils httpUtils = new HttpUtils();
-        httpUtils.startGetRequest(URLConfig.workOrderProcess_url + "?styleId=" + model.getStyleId(), new HttpInterface() {
+        httpUtils.startGetRequest(URLConfig.workOrderProcess_url + "?styleId=" + model.getStyleId() + "&workOrderId=" + model.getWorkOrderId(), new HttpInterface() {
             @Override
             public void onResponse(String s) {
                 Gson gson = new Gson();
@@ -267,21 +315,23 @@ public class DetailActivity extends BaseActivity {
                             horizonList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                    if (gongxuList.get(position).isChoosed()) {
-                                        selectedNum = -1;
-                                        gongxuList.get(position).setChoosed(false);
+                                    if (position < gongxuList.size()) {
+                                        if (gongxuList.get(position).isChoosed()) {
+                                            selectedNum = -1;
+                                            gongxuList.get(position).setChoosed(false);
+                                            circleAdapter.notifyDataSetChanged();
+                                            return;
+                                        }
+                                        if (gongxuList.get(position).getStatus() == 2 || gongxuList.get(position).getStatus() == 3) {
+                                            return;
+                                        }
+                                        for (gongxuModel m : gongxuList) {
+                                            m.setChoosed(false);
+                                        }
+                                        gongxuList.get(position).setChoosed(true);
                                         circleAdapter.notifyDataSetChanged();
-                                        return;
+                                        selectedNum = position;
                                     }
-                                    if (gongxuList.get(position).getStatus() == 2 || gongxuList.get(position).getStatus() == 3) {
-                                        return;
-                                    }
-                                    for (gongxuModel m : gongxuList) {
-                                        m.setChoosed(false);
-                                    }
-                                    gongxuList.get(position).setChoosed(true);
-                                    circleAdapter.notifyDataSetChanged();
-                                    selectedNum = position;
                                 }
                             });
                         } else {
@@ -357,7 +407,7 @@ public class DetailActivity extends BaseActivity {
         detailList.setLayoutParams(params);
     }
 
-    @OnClick({R.id.btn_back, R.id.lin_back, R.id.detail_clickComplete, R.id.detail_complete, R.id.clickStart})
+    @OnClick({R.id.btn_back, R.id.lin_back, R.id.detail_clickComplete, R.id.detail_complete, R.id.clickStart,R.id.back_btn})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_back:
@@ -370,6 +420,7 @@ public class DetailActivity extends BaseActivity {
                 complete_model tem = new complete_model();
                 tem.setId(model.getId());
                 tem.setWorkOrderId(model.getWorkOrderId());
+                //tem.setUserId(Singleton.getInstance().getUserModel().getId());
                 ToolClass.showProgress(DetailActivity.this);
                 Gson gson = new Gson();
                 String data1 = gson.toJson(tem, complete_model.class);
@@ -382,7 +433,7 @@ public class DetailActivity extends BaseActivity {
                         MyBaseModel model = gson.fromJson(s, MyBaseModel.class);
                         if (model.isSuccess()) {
                             ToolClass.showMessage("已经完成工序", DetailActivity.this);
-                            finish();
+                            refreshDataView();
                         } else {
                             ToolClass.showMessage(model.getMessage(), Singleton.instance.getContext());
                         }
@@ -432,11 +483,31 @@ public class DetailActivity extends BaseActivity {
                         MyBaseModel model = gson.fromJson(s, MyBaseModel.class);
                         if (model.isSuccess()) {
                             ToolClass.showMessage("已经开始工序", DetailActivity.this);
-                            finish();
+                            refreshDataView();
                         } else {
                             ToolClass.progressDismisss();
+                            ToolClass.showMessage(model.getMessage(), DetailActivity.this);
+                        }
+                    }
+                });
+                break;
+            case R.id.back_btn:
+                ToolClass.showProgress(DetailActivity.this);
+                httpUtils = new HttpUtils();
+                httpUtils.startPostRequest("userApp/undoOrder?id=" + model.getWorkOrderId(), null, new HttpInterface() {
+
+                    @Override
+                    public void onResponse(String s) {
+                        ToolClass.progressDismisss();
+                        Gson gson = new Gson();
+                        MyBaseModel model = gson.fromJson(s, MyBaseModel.class);
+                        if (model.isSuccess()) {
+                            ToolClass.showMessage("退回成功", DetailActivity.this);
+                            refreshDataView();
+                        } else {
                             ToolClass.showMessage(model.getMessage(), Singleton.instance.getContext());
                         }
+
                     }
                 });
                 break;

@@ -1,4 +1,10 @@
-package com.product.productmanager.Model;
+package com.product.productmanager.Model.common;
+
+import android.content.Intent;
+
+import com.product.productmanager.MainActivity;
+import com.product.productmanager.Other.Singleton;
+import com.product.productmanager.UserActivity;
 
 import java.util.Map;
 

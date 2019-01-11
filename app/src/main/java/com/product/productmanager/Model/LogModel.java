@@ -1,5 +1,7 @@
 package com.product.productmanager.Model;
 
+import com.product.productmanager.Model.common.MyBaseModel;
+
 public class LogModel extends MyBaseModel {
     public UserModel object = new UserModel();
 

@@ -96,7 +96,10 @@ public class TabFragment1 extends BaseFragment {
         return view;
     }
 
-    private void initView() {
+    public void initView() {
+        if (nameLabel == null){
+            return;
+        }
         Log.d("CurrentToken", Singleton.instance.getToken());
         nameLabel.setText(Singleton.instance.getUserModel().getRealName());
         companyLabel.setText(Singleton.instance.getUserModel().getDepartmentName());

@@ -35,7 +35,7 @@ public class HomeActivity extends AppCompatActivity implements RadioGroup.OnChec
     private RadioButton rb_better;
     private MyViewPager mVp;
     private MyFragmentPagerAdapter mAdapter;
-
+    private boolean hasLoad = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +44,16 @@ public class HomeActivity extends AppCompatActivity implements RadioGroup.OnChec
         //CrashReport.initCrashReport(getApplicationContext(), "e0b90440f3", true);
         initView();
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MyFragmentPagerAdapter adapter = (MyFragmentPagerAdapter)mVp.getAdapter();
+        if (hasLoad && adapter != null){
+            adapter.myFragment1.initView();
+        }
+    }
+
     private void initView() {
         mAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager());
         rg_tab_bar = findViewById(R.id.rg_tab_bar);
@@ -84,6 +94,8 @@ public class HomeActivity extends AppCompatActivity implements RadioGroup.OnChec
             }
         });
         rb_channel.setChecked(true);
+        hasLoad = true;
+
     }
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
